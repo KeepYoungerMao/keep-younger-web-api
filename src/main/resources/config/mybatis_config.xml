@@ -18,7 +18,7 @@
     </environments>
 
     <mappers>
-        <mapper resource="mapper/ray/TvMapper.xml"/>
+        <mapper resource="mapper/data/BookMapper.xml"/>
     </mappers>
 
 </configuration>

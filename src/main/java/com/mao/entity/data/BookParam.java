@@ -1,5 +1,6 @@
 package com.mao.entity.data;
 
+import com.mao.entity.Page;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class BookParam {
+public class BookParam extends Page {
 
     private String name;
     private String auth;

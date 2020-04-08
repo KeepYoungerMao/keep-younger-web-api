@@ -1,7 +1,7 @@
 package com.mao.service;
 
 import com.mao.MainVerticle;
-import com.mao.entity.response.ResponseData;
+import com.mao.entity.response.Response;
 import io.vertx.ext.web.RoutingContext;
 
 /**
@@ -14,22 +14,29 @@ public class MainService {
     private static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
 
     public static void index(RoutingContext ctx){
-        ctx.response().end(ResponseData.ok(MainVerticle.server));
+        ctx.response().end(Response.ok(MainVerticle.server));
     }
 
     public static void permission(RoutingContext ctx){
         String path = ctx.request().path();
-        ctx.response().end(ResponseData.permission("",path));
+        ctx.response().end(Response.permission(path));
     }
 
     public static void notFound(RoutingContext ctx){
         String path = ctx.request().path();
-        ctx.response().end(ResponseData.notFound(path));
+        ctx.response().end(Response.notFound(path));
+    }
+
+    public static void notAllowed(RoutingContext ctx){
+        String path = ctx.request().path();
+        ctx.response().end(Response.notAllowed(path));
     }
 
     public static void error(RoutingContext ctx){
+        //错误打印
+        ctx.failure().printStackTrace();
         String path = ctx.request().path();
-        ctx.response().end(ResponseData.error("500 server error",path));
+        ctx.response().end(Response.error(path));
     }
 
     public static void filter(RoutingContext ctx){

@@ -2,9 +2,11 @@ package com.mao;
 
 import com.mao.entity.Server;
 import com.mao.service.MainService;
+import com.mao.service.data.BookService;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 
 /**
  * 服务开启
@@ -12,15 +14,17 @@ import io.vertx.ext.web.Router;
  */
 public class MainVerticle extends AbstractVerticle {
 
-    public static final Server server = PropertiesReader.readServer("/config/server.properties");
+    public static final Server server = PropertiesReader.readServer("config/server.properties");
 
     @Override
     public void start() {
         Router router = Router.router(vertx);
         router.route().order(-1).handler(MainService::filter);
         router.route("/").handler(MainService::index);
+        router.get("/api/data/book").handler(BodyHandler.create()).handler(BookService::getBooks);
         router.errorHandler(404, MainService::notFound);
         router.errorHandler(401,MainService::permission);
+        router.errorHandler(405,MainService::notAllowed);
         router.errorHandler(500,MainService::error);
         vertx.createHttpServer().requestHandler(router).listen(8080);
     }

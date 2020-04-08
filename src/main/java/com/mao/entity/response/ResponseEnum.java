@@ -17,6 +17,8 @@ public enum ResponseEnum {
 
     NOTFOUND(404,"resource not found"),
 
+    NOT_ALLOWED(405,"method not allowed"),
+
     ERROR(500,"request error");
 
     private int code;

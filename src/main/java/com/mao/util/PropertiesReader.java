@@ -36,8 +36,8 @@ public class PropertiesReader {
      * @return map数据
      * @throws IOException 读取错误抛出异常
      */
-    public static Map<String, String> getProperties(String path) throws IOException {
-        if (path.endsWith(".properties"))
+    private static Map<String, String> getProperties(String path) throws IOException {
+        if (!path.endsWith(".properties"))
             throw new IllegalArgumentException("file not supported");
         Reader reader = Resources.getResourceAsReader(path);
         String line;

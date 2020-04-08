@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PageData<T> {
-    private int total;          //总页数
+    private long total;          //总页数
     private int rows;           //每页条数
     private int page;           //当前页
     private Object filter;      //过滤参数

@@ -3,5 +3,52 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mao.mapper.data.BookMapper">
 
+    <sql id="bookFilter">
+        <if test="type != null and type > 0">
+            AND `type_id` = #{type}
+        </if>
+        <if test="dynasty != null and dynasty > 0">
+            AND `dynasty_id` = #{dynasty}
+        </if>
+        <if test="free != null">
+            AND `free` = #{free}
+        </if>
+        <if test="off_sale != null">
+            AND `off_sale` = #{off_sale}
+        </if>
+    </sql>
+
+    <!-- get books data -->
+    <select id="getBooks" parameterType="com.mao.entity.data.BookParam"
+            resultType="com.mao.entity.data.Book">
+        SELECT `id`,`name`,`auth`,`image`,`s_image`,`type`,`type_id`,
+        `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
+        FROM tt_book WHERE `delete` = FALSE
+        <include refid="bookFilter"/>
+        ORDER BY `id` ASC LIMIT #{page},#{row}
+    </select>
+
+    <!-- get books total page -->
+    <select id="getBookTotalPage" parameterType="com.mao.entity.data.BookParam"
+            resultType="java.lang.Long">
+        SELECT COUNT(`id`) FROM tt_book WHERE `delete` = FALSE
+        <include refid="bookFilter"/>
+    </select>
+
+    <!-- get books data -->
+    <select id="searchBooks" parameterType="com.mao.entity.data.BookParam"
+            resultType="com.mao.entity.data.Book">
+        SELECT `id`,`name`,`auth`,`image`,`s_image`,`type`,`type_id`,
+        `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
+        FROM tt_book WHERE `delete` = FALSE
+        <if test="name != null and name != ''">
+            AND LOCATE(#{name},`name`) > 0
+        </if>
+        <if test="auth != null and auth != ''">
+            AND LOCATE(#{auth},`auth`) > 0
+        </if>
+        <include refid="bookFilter"/>
+        ORDER BY `id` ASC LIMIT #{row}
+    </select>
 
 </mapper>
