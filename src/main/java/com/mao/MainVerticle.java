@@ -2,6 +2,7 @@ package com.mao;
 
 import com.mao.entity.Server;
 import com.mao.service.MainService;
+import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 
@@ -11,7 +12,7 @@ import io.vertx.ext.web.Router;
  */
 public class MainVerticle extends AbstractVerticle {
 
-    public static final Server server = new Server();
+    public static final Server server = PropertiesReader.readServer("/config/server.properties");
 
     @Override
     public void start() {
