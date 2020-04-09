@@ -16,14 +16,18 @@ public class Server {
     private final String status;
     private final String version;
     private final String description;
+    private final String ip;
+    private final int port;
     private final long start;
 
-    public Server(Map<String, String> properties){
+    public Server(Map<String, String> properties) throws IllegalArgumentException{
         this.name = properties.get("server.name");
         this.link = properties.get("server.link");
         this.status = "ok";
         this.version = properties.get("server.version");
         this.description = properties.get("server.description");
+        this.ip = properties.get("server.ip");
+        this.port = Integer.parseInt(properties.get("server.port"));
         this.start = System.currentTimeMillis();
     }
 

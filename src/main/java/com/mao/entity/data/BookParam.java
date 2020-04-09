@@ -3,6 +3,7 @@ package com.mao.entity.data;
 import com.mao.entity.Page;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 古籍查询参数
@@ -10,6 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class BookParam extends Page {
 
     private String name;

@@ -46,4 +46,14 @@ public class MainService {
         ctx.next();
     }
 
+    private static final String SRC_FILE_PRE = "D:";
+
+    /**
+     * 静态资源：图片资源转发
+     */
+    public static void image(RoutingContext ctx){
+        String path = ctx.request().path();
+        ctx.response().sendFile(SRC_FILE_PRE + path);
+    }
+
 }

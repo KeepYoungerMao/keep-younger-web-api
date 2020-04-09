@@ -24,6 +24,7 @@ public class BookService {
         if (null == bookParam)
             ctx.response().end(Response.error("cannot find params body",ctx.request().path()));
         else {
+            System.out.println(bookParam);
             SqlSession session = MybatisConfig.getSession();
             BookMapper mapper = session.getMapper(BookMapper.class);
             if (SU.isEmpty(bookParam.getAuth()) && SU.isEmpty(bookParam.getName())){

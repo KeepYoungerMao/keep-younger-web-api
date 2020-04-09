@@ -9,6 +9,7 @@ import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.FaviconHandler;
 
 /**
  * 服务开启
@@ -21,7 +22,9 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start() {
         Router router = Router.router(vertx);
-        router.route().order(-1).handler(MainService::filter);
+        router.route("/favicon.ico").handler(FaviconHandler.create("favicon.ico"));
+        router.route("/image/*").handler(MainService::image);
+        router.route().handler(MainService::filter);
         router.route("/").handler(MainService::index);
         router.get("/api/data/book").handler(BodyHandler.create()).handler(BookService::getBooks);
         router.get("/his/address/ip").handler(BaiDuMap::addressIp);
@@ -30,7 +33,7 @@ public class MainVerticle extends AbstractVerticle {
         router.errorHandler(401,MainService::permission);
         router.errorHandler(405,MainService::notAllowed);
         router.errorHandler(500,MainService::error);
-        vertx.createHttpServer().requestHandler(router).listen(8080);
+        vertx.createHttpServer().requestHandler(router).listen(server.getPort());
     }
 
 }
