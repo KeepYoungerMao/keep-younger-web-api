@@ -2,6 +2,7 @@ package com.mao.service;
 
 import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
+import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
 
 /**
@@ -10,8 +11,8 @@ import io.vertx.ext.web.RoutingContext;
  */
 public class MainService {
 
-    private static final String CONTENT_TYPE = "Content-type";
-    private static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
+    public static final String CONTENT_TYPE = "Content-type";
+    public static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
 
     public static void index(RoutingContext ctx){
         ctx.response().end(Response.ok(MainVerticle.server));
@@ -35,8 +36,9 @@ public class MainService {
     public static void error(RoutingContext ctx){
         //错误打印
         ctx.failure().printStackTrace();
+        String message = ctx.failure().getMessage();
         String path = ctx.request().path();
-        ctx.response().end(Response.error(path));
+        ctx.response().end(SU.isEmpty(message) ? Response.error(path) : Response.error(message,path));
     }
 
     public static void filter(RoutingContext ctx){

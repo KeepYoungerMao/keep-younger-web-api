@@ -36,11 +36,11 @@ public class BookService {
                 data.setFilter(bookParam);
                 data.setData(books);
                 session.close();
-                ctx.response().end(JsonUtil.obj2json(Response.ok(data)));
+                ctx.response().end(Response.ok(data));
             } else {
                 List<Book> books = mapper.searchBooks(bookParam);
                 session.close();
-                ctx.response().end(JsonUtil.obj2json(Response.ok(books)));
+                ctx.response().end(Response.ok(books));
             }
         }
     }
