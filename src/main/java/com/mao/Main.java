@@ -1,6 +1,8 @@
 package com.mao;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 
 /**
  * debug主程序
@@ -9,10 +11,12 @@ import io.vertx.core.Vertx;
  */
 public class Main {
 
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(MainVerticle.class.getName());
-        System.out.println("service api started...");
+        log.info("service api started...");
     }
 
 }

@@ -2,7 +2,7 @@ package com.mao.entity;
 
 import lombok.Getter;
 
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * 服务器信息
@@ -20,14 +20,14 @@ public class Server {
     private final int port;
     private final long start;
 
-    public Server(Map<String, String> properties) throws IllegalArgumentException{
-        this.name = properties.get("server.name");
-        this.link = properties.get("server.link");
+    public Server(Properties properties) throws IllegalArgumentException{
+        this.name = properties.getProperty("server.name");
+        this.link = properties.getProperty("server.link");
         this.status = "ok";
-        this.version = properties.get("server.version");
-        this.description = properties.get("server.description");
-        this.ip = properties.get("server.ip");
-        this.port = Integer.parseInt(properties.get("server.port"));
+        this.version = properties.getProperty("server.version");
+        this.description = properties.getProperty("server.description");
+        this.ip = properties.getProperty("server.ip");
+        this.port = Integer.parseInt(properties.getProperty("server.port"));
         this.start = System.currentTimeMillis();
     }
 

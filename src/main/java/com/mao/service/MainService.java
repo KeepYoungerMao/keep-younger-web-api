@@ -3,6 +3,8 @@ package com.mao.service;
 import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
 import com.mao.util.SU;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.RoutingContext;
 
 /**
@@ -11,10 +13,13 @@ import io.vertx.ext.web.RoutingContext;
  */
 public class MainService {
 
+    private static final Logger log = LoggerFactory.getLogger(MainService.class);
+
     public static final String CONTENT_TYPE = "Content-type";
     public static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
 
     public static void index(RoutingContext ctx){
+        log.info("load server message");
         ctx.response().end(Response.ok(MainVerticle.server));
     }
 
@@ -46,6 +51,9 @@ public class MainService {
         ctx.next();
     }
 
+    /**
+     * 静态资源系统路径前缀
+     */
     private static final String SRC_FILE_PRE = "D:";
 
     /**
