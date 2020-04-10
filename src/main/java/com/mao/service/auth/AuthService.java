@@ -3,11 +3,8 @@ package com.mao.service.auth;
 import com.mao.entity.response.Response;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * 认证
@@ -16,33 +13,26 @@ import java.util.Map;
 public class AuthService {
 
     private static final AuthProvider provider = new JDBCAuthProvider();
-    public static final Map<String, Account> USERS = new HashMap<>();
+    static final String USERNAME = "username";
+    static final String PASSWORD = "password";
 
     public static void token(RoutingContext ctx){
-        String username = ctx.request().getParam("username");
-        String password = ctx.request().getParam("password");
-        Account account = getUserByName(username);
-        USERS.put(username,account);
-        ctx.response().end(Response.ok(account));
-    }
-
-    public static void flush(RoutingContext ctx){
-        String username = ctx.request().getParam("username");
-        JsonObject jsonObject = new JsonObject().put("username",username);
-        provider.authenticate(jsonObject, handler -> {
-            if (handler.succeeded())
-                ctx.response().end(Response.ok(handler.result()));
-            else
-                ctx.response().end(Response.error("authenticate failed"));
+        JsonObject data = new JsonObject()
+                .put(USERNAME,ctx.request().getParam(USERNAME))
+                .put(PASSWORD,ctx.request().getParam(PASSWORD));
+        provider.authenticate(data, handler -> {
+            if (handler.succeeded()){
+                User user = handler.result();
+                ctx.setUser(user);
+                ctx.response().end(Response.ok(user));
+            } else {
+                ctx.response().end(Response.error(handler.cause().getMessage()));
+            }
         });
     }
 
-    public static Account getUserByName(String name){
-        Account account = new Account();
-        account.setUsername(name);
-        account.setPassword("admin");
-        account.setAuthorities(new HashSet<String>(){{this.add("a");this.add("b");}});
-        return account;
+    public static void flush(RoutingContext ctx){
+        ctx.response().end(Response.ok(ctx.user()));
     }
 
 }

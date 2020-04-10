@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mao.mapper.sys.UserMapper">
+
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.mao.entity.sys.SysUser">
+        SELECT `id`,`full_name`,`username`,`password`,`locked`,`expired`,`enabled`,
+        `role_id`,`role_name`,`company`,`dept`,`note`,`image`,`identity_code`,
+        `address`,`qq`,`wx`,`phone` FROM sys_user WHERE `username` = #{username}
+    </select>
+
+    <select id="getPermissionByRoleId" parameterType="java.lang.Long" resultType="com.mao.entity.sys.Permission">
+        SELECT p.id,p.name
+        FROM sys_permission AS p
+        LEFT JOIN sys_role_permission_ref AS r ON p.`id` = r.`per_id`
+        WHERE r.`role_id` = #{id}
+    </select>
+
+</mapper>

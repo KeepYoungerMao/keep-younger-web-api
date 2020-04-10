@@ -1,4 +1,4 @@
-package com.mao.service.auth;
+package com.mao.entity.sys;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -9,24 +9,43 @@ import io.vertx.ext.auth.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 /**
- * @author : create by zongx at 2020/4/10 18:01
+ * 用户
+ * @author zongx at 2020/4/10 21:06
  */
 @Getter
 @Setter
-public class Account implements User {
+public class SysUser implements User {
 
+    private Long id;
+    private String full_name;
     private String username;
     private String password;
-    private Set<String> authorities;
+    private Boolean locked;
+    private Boolean expired;
+    private Boolean enabled;
+    private Long role_id;
+    private Long role_name;
+    private String company;
+    private String dept;
+    private String note;
+    private String image;
+    private String idcard;
+    private String address;
+    private String qq;
+    private String wx;
+    private String phone;
+    private String email;
+
+    private List<Permission> permissions;
 
     @Override
     public User isAuthorized(String authority, Handler<AsyncResult<Boolean>> handler) {
         boolean success = false;
-        for (String s : authorities) {
-            if (s.equals(authority)){
+        for (Permission p : permissions) {
+            if (p.getName().equals(authority)){
                 success = true;
                 break;
             }
@@ -37,13 +56,12 @@ public class Account implements User {
 
     @Override
     public User clearCache() {
-        AuthService.USERS.remove(this.username);
         return this;
     }
 
     @Override
     public JsonObject principal() {
-        return new JsonObject().put("user",this);
+        return new JsonObject().put("username",username);
     }
 
     @Override
