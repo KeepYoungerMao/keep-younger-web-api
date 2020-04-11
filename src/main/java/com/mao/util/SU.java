@@ -1,5 +1,7 @@
 package com.mao.util;
 
+import java.util.UUID;
+
 /**
  * 字符串工具类
  * @author zongx at 2020/4/8 21:24
@@ -50,6 +52,10 @@ public class SU {
                 return false;
         }
         return true;
+    }
+
+    public static String random(){
+        return UUID.randomUUID().toString();
     }
 
 }

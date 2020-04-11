@@ -4,9 +4,8 @@
 <mapper namespace="com.mao.mapper.sys.UserMapper">
 
     <select id="getUserByName" parameterType="java.lang.String" resultType="com.mao.entity.sys.SysUser">
-        SELECT `id`,`full_name`,`username`,`password`,`locked`,`expired`,`enabled`,
-        `role_id`,`role_name`,`company`,`dept`,`note`,`image`,`identity_code`,
-        `address`,`qq`,`wx`,`phone` FROM sys_user WHERE `username` = #{username}
+        SELECT `id`,`username`,`password`,`locked`,`expired`,`enabled`,`role_id`
+        FROM sys_user WHERE `username` = #{username}
     </select>
 
     <select id="getPermissionByRoleId" parameterType="java.lang.Long" resultType="com.mao.entity.sys.Permission">
