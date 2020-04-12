@@ -7,6 +7,7 @@ import com.mao.entity.response.Token;
 import com.mao.entity.sys.Client;
 import com.mao.entity.sys.Permission;
 import com.mao.mapper.sys.UserMapper;
+import com.mao.service.MainService;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.ibatis.session.SqlSession;
@@ -34,12 +35,13 @@ public class AuthService {
             SqlSession session = MybatisConfig.getSession();
             UserMapper mapper = session.getMapper(UserMapper.class);
             Client client = mapper.getClientById(client_id);
-            if (null == client) {
+            String s = MainService.checkClient(client, true, false);
+            if (null != s) {
                 session.close();
-                ctx.response().end(Response.error("invalid param client_id", path));
+                ctx.response().end(Response.error(s,path));
             } else if (!client_secret.equals(client.getClient_secret())) {
                 session.close();
-                ctx.response().end(Response.error("invalid param client_secret"));
+                ctx.response().end(Response.error("invalid param client_secret",path));
             } else {
                 List<Permission> permissions = mapper.getPermissionByRoleId(client.getRole_id());
                 session.close();
@@ -49,7 +51,6 @@ public class AuthService {
                 ctx.response().end(Response.ok(token));
             }
         }
-        ctx.response().end();
     }
 
     public static void refresh(RoutingContext ctx){

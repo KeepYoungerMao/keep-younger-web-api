@@ -14,22 +14,29 @@ import io.vertx.ext.web.handler.FaviconHandler;
 
 /**
  * 服务开启
+ * 项目实现：
+ * 1.文件读取
+ * 2.自定义拦截器
+ * 3.子路由
+ * 4.错误处理器
+ * 5.权限控制
+ * 6.简易文件服务器
  * @author zongx at 2020/4/7 21:38
  */
 public class MainVerticle extends AbstractVerticle {
 
     //服务器信息
     public static final Server server = PropertiesReader.readServer("config/server.properties");
-    //过滤路径
-    public static final String[] FILTER_PATH = new String[]{"/auth/*","/api/*","/file/*"};
+    //过滤路径，此处只实现以何路径开头的拦截
+    public static final String[] FILTER_PATH = new String[]{"/his","/api","/file"};
 
     @Override
     public void start() {
         Router router = Router.router(vertx);
         router.route("/favicon.ico").handler(FaviconHandler.create("favicon.ico"));
-        router.route("/file/*").subRouter(file());
         router.route().handler(MainService::filter);
         router.route("/").handler(MainService::index);
+        router.route("/file/*").subRouter(file());
         router.route("/auth/*").subRouter(auth());
         router.route("/api/*").subRouter(api());
         router.route("/his/*").subRouter(his());
