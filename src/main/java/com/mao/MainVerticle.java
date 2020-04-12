@@ -45,7 +45,8 @@ public class MainVerticle extends AbstractVerticle {
      */
     private Router auth(){
         Router authRouter = Router.router(vertx);
-        authRouter.get("/authorize").handler(AuthService::authorize);
+        authRouter.route("/authorize").handler(AuthService::authorize);
+        authRouter.route("/refresh").handler(AuthService::refresh);
         return authRouter;
     }
 

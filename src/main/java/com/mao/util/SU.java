@@ -1,5 +1,6 @@
 package com.mao.util;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -7,6 +8,12 @@ import java.util.UUID;
  * @author zongx at 2020/4/8 21:24
  */
 public class SU {
+
+    private static final char[] chars = new char[]{
+            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+            '=','@','#','$','%','&','*'
+    };
 
     public static boolean isEmpty(String str){
         return null == str || str.length() <= 0;
@@ -54,8 +61,17 @@ public class SU {
         return true;
     }
 
-    public static String random(){
+    public static String uuid(){
         return UUID.randomUUID().toString();
+    }
+
+    public static String random(){
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 32; i++) {
+            sb.append(chars[random.nextInt(chars.length)]);
+        }
+        return sb.toString();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.mao.mapper.sys;
 
+import com.mao.entity.sys.Client;
 import com.mao.entity.sys.Permission;
 import com.mao.entity.sys.SysUser;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,6 +21,13 @@ public interface UserMapper {
      * @return 用户信息
      */
     SysUser getUserByName(@Param("username") String username);
+
+    /**
+     * 根据client_id查询客户端数据
+     * @param id client_id
+     * @return 客户端数据
+     */
+    Client getClientById(@Param("id") String id);
 
     /**
      * 根据角色id查询权限列表

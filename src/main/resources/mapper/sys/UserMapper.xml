@@ -8,6 +8,11 @@
         FROM sys_user WHERE `username` = #{username}
     </select>
 
+    <select id="getClientById" parameterMap="java.lang.String" resultType="com.mao.entity.sys.Client">
+        SELECT `client_id`,`client_secret`,`locked`,`expired`,`enabled`,`role_id`
+        FROM sys_client WHERE `client_id` = #{id}
+    </select>
+
     <select id="getPermissionByRoleId" parameterType="java.lang.Long" resultType="com.mao.entity.sys.Permission">
         SELECT p.id,p.name
         FROM sys_permission AS p
