@@ -2,7 +2,7 @@ package com.mao.config.cache;
 
 import com.mao.entity.response.Token;
 import com.mao.entity.sys.Client;
-import com.mao.service.MainService;
+import com.mao.service.auth.AuthService;
 import com.mao.util.SU;
 
 import java.util.ArrayList;
@@ -139,7 +139,7 @@ public class LoginClientCache {
         Client client = getClient(oldToken.getAccess_token());
         if (null == client)
             return null;
-        String s = MainService.checkClient(client, false, false);
+        String s = AuthService.checkClient(client, false, false);
         if (null != s)
             return null;
         Token newToken = new Token(SU.uuid(),SU.uuid());

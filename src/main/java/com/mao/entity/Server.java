@@ -18,6 +18,7 @@ public class Server {
     private final String description;
     private final String ip;
     private final int port;
+    private final boolean needAuthorize;
     private final long start;
 
     public Server(Properties properties) throws IllegalArgumentException{
@@ -28,6 +29,7 @@ public class Server {
         this.description = properties.getProperty("server.description");
         this.ip = properties.getProperty("server.ip");
         this.port = Integer.parseInt(properties.getProperty("server.port"));
+        this.needAuthorize = Boolean.parseBoolean(properties.getProperty("server.needAuthorize"));
         this.start = System.currentTimeMillis();
     }
 

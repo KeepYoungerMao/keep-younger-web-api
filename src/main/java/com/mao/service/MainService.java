@@ -1,9 +1,8 @@
 package com.mao.service;
 
 import com.mao.MainVerticle;
-import com.mao.config.cache.LoginClientCache;
 import com.mao.entity.response.Response;
-import com.mao.entity.sys.Client;
+import com.mao.service.auth.AuthService;
 import com.mao.util.SU;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -17,6 +16,7 @@ public class MainService {
 
     private static final Logger log = LoggerFactory.getLogger(MainService.class);
 
+    //所有接口统一发送形式
     public static final String CONTENT_TYPE = "Content-type";
     public static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
 
@@ -48,52 +48,23 @@ public class MainService {
         ctx.response().end(SU.isEmpty(message) ? Response.error(path) : Response.error(message,path));
     }
 
+    /**
+     * 拦截器
+     * 1.为所有请求添加 application/json 返回格式
+     * 2.授权拦截
+     */
     public static void filter(RoutingContext ctx){
-        String path = ctx.request().path();
         ctx.response().putHeader(CONTENT_TYPE,CONTENT_TYPE_NAME);
-        boolean has = true;
-        for (String p : MainVerticle.FILTER_PATH) {
-            if (path.startsWith(p)){
-                String authorization = ctx.request().getHeader("Authorization");
-                if (SU.isEmpty(authorization)){
-                    authorization = ctx.request().getParam("access_token");
-                }
-                if (SU.isEmpty(authorization))
-                    ctx.response().end(Response.error("request resource need authorization param",path));
-                else {
-                    Client client = LoginClientCache.getClient(authorization);
-                    String s = checkClient(client,false,true);
-                    if (null != s)
-                        ctx.response().end(Response.error(s,path));
-                    else
-                        ctx.next();
-                }
-                has = false;
-                break;
-            }
-        }
-        if (has)
+        if (MainVerticle.server.isNeedAuthorize())
+            AuthService.authorization(ctx.request(), handler -> {
+                if (handler.failed())
+                    ctx.response().end(Response.error(handler.cause().getMessage(),ctx.request().path()));
+                else
+                    ctx.next();
+            });
+        else
             ctx.next();
     }
-
-    public static String checkClient(Client client, boolean first, boolean inUse){
-        if (null == client)
-            return first ? "invalid param client_id" : "invalid param authorization";
-        if (client.getLocked())
-            return "client cannot use because of locked";
-        if (client.getExpired())
-            return "client cannot use because of expired";
-        if (!client.getEnabled())
-            return "old client. cannot use";
-        if (inUse && System.currentTimeMillis() >= client.getExpire_time())
-            return "access token expired. please request a new one";
-        return null;
-    }
-
-    /**
-     * 静态资源系统路径前缀
-     */
-    private static final String SRC_FILE_PRE = "D:";
 
     /**
      * 静态资源：图片资源转发
@@ -101,7 +72,7 @@ public class MainService {
     public static void image(RoutingContext ctx){
         String path = ctx.request().path();
         path = path.substring(5);
-        ctx.response().sendFile(SRC_FILE_PRE + path);
+        ctx.response().sendFile(MainVerticle.IMAGE_FILE_LOCAL_PATH_PRE + path);
     }
 
 }

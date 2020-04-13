@@ -26,9 +26,11 @@ import io.vertx.ext.web.handler.FaviconHandler;
 public class MainVerticle extends AbstractVerticle {
 
     //服务器信息
-    public static final Server server = PropertiesReader.readServer("config/server.properties");
+    public static final Server server = PropertiesReader.readServer("/config/server.properties");
     //过滤路径，此处只实现以何路径开头的拦截
     public static final String[] FILTER_PATH = new String[]{"/his","/api","/file"};
+    //图片数据储存位置前缀（至image文件夹前）
+    public static final String IMAGE_FILE_LOCAL_PATH_PRE = "D:";
 
     @Override
     public void start() {
@@ -37,7 +39,8 @@ public class MainVerticle extends AbstractVerticle {
         router.route().handler(MainService::filter);
         router.route("/").handler(MainService::index);
         router.route("/file/*").subRouter(file());
-        router.route("/auth/*").subRouter(auth());
+        if (server.isNeedAuthorize())
+            router.route("/auth/*").subRouter(auth());
         router.route("/api/*").subRouter(api());
         router.route("/his/*").subRouter(his());
         router.errorHandler(404, MainService::notFound);
