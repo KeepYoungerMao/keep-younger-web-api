@@ -6,9 +6,12 @@ import com.mao.his.weather.ChinaWeather;
 import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
 import com.mao.service.data.BookService;
+import com.mao.util.HttpUtil;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.FaviconHandler;
 
@@ -31,6 +34,8 @@ public class MainVerticle extends AbstractVerticle {
     public static final String[] FILTER_PATH = new String[]{"/his","/api","/file"};
     //图片数据储存位置前缀（至image文件夹前）
     public static final String IMAGE_FILE_LOCAL_PATH_PRE = "D:";
+    //web客户端
+    public static final WebClient webClient = HttpUtil.getWebClient(Vertx.vertx());
 
     @Override
     public void start() {

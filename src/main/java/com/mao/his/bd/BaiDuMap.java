@@ -1,11 +1,9 @@
 package com.mao.his.bd;
 
+import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
-import com.mao.service.MainService;
-import com.mao.util.HttpUtil;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.client.WebClient;
 
 /**
  * 百度地图数据请求
@@ -32,16 +30,13 @@ public class BaiDuMap {
             ctx.response().end(Response.error("param [ip] is needed",ctx.request().path()));
         else if (SU.isIP(ip)){
             String url = String.format(GET_LOCATION_URL,ip,AK);
-            WebClient webClient = HttpUtil.getWebClient(ctx.vertx());
-            webClient.getAbs(url)
-                    .putHeader(MainService.CONTENT_TYPE,MainService.CONTENT_TYPE_NAME)
-                    .send(handler -> {
-                        if (handler.succeeded()){
-                            ctx.response().end(handler.result().bodyAsString());
-                        } else {
-                            ctx.response().end(Response.error(GET_IP_ADDRESS_ERROR,ctx.request().path()));
-                        }
-                    });
+            MainVerticle.webClient.getAbs(url).send(handler -> {
+                if (handler.succeeded()){
+                    ctx.response().end(handler.result().bodyAsString());
+                } else {
+                    ctx.response().end(Response.error(GET_IP_ADDRESS_ERROR,ctx.request().path()));
+                }
+            });
         } else
             ctx.response().end(Response.error("invalid ip [" + ip + "]",ctx.request().path()));
     }

@@ -1,5 +1,6 @@
 package com.mao.his.weather;
 
+import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
 import com.mao.his.weather.entity.ForecastWeather;
 import com.mao.his.weather.entity.Result;
@@ -7,7 +8,6 @@ import com.mao.util.HttpUtil;
 import com.mao.util.JsonUtil;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.client.WebClient;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +33,7 @@ public class ChinaWeather {
             ctx.response().end(Response.error("param [city] is needed",ctx.request().path()));
         else {
             String url = String.format(WEATHER_URL,city);
-            WebClient webClient = HttpUtil.getWebClient(ctx.vertx());
-            webClient.getAbs(url).send(handler -> {
+            MainVerticle.webClient.getAbs(url).send(handler -> {
                 if (handler.succeeded()){
                     String s = HttpUtil.unGZIP(handler.result().body().getBytes());
                     if (SU.isNotEmpty(s)){
