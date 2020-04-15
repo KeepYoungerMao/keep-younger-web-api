@@ -27,18 +27,18 @@ public class BaiDuMap {
     public static void addressIp(RoutingContext ctx){
         String ip = ctx.request().getParam("ip");
         if (SU.isEmpty(ip))
-            ctx.response().end(Response.error("param [ip] is needed",ctx.request().path()));
+            ctx.response().end(Response.error("param [ip] is needed"));
         else if (SU.isIP(ip)){
             String url = String.format(GET_LOCATION_URL,ip,AK);
             MainVerticle.webClient.getAbs(url).send(handler -> {
                 if (handler.succeeded()){
                     ctx.response().end(handler.result().bodyAsString());
                 } else {
-                    ctx.response().end(Response.error(GET_IP_ADDRESS_ERROR,ctx.request().path()));
+                    ctx.response().end(Response.error(GET_IP_ADDRESS_ERROR));
                 }
             });
         } else
-            ctx.response().end(Response.error("invalid ip [" + ip + "]",ctx.request().path()));
+            ctx.response().end(Response.error("invalid ip [" + ip + "]"));
     }
 
 }

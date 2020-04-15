@@ -2,8 +2,7 @@ package com.mao.service.data;
 
 import com.mao.config.MybatisConfig;
 import com.mao.entity.PageData;
-import com.mao.entity.data.Book;
-import com.mao.entity.data.BookParam;
+import com.mao.entity.data.book.*;
 import com.mao.entity.response.Response;
 import com.mao.mapper.data.BookMapper;
 import com.mao.util.JsonUtil;
@@ -22,7 +21,7 @@ public class BookService {
     public static void getBooks(RoutingContext ctx){
         BookParam bookParam = JsonUtil.json2obj(ctx.getBodyAsString(), BookParam.class);
         if (null == bookParam)
-            ctx.response().end(Response.error("cannot find params body",ctx.request().path()));
+            ctx.response().end(Response.error("cannot find params body"));
         else {
             System.out.println(bookParam);
             SqlSession session = MybatisConfig.getSession();
@@ -43,6 +42,39 @@ public class BookService {
                 session.close();
                 ctx.response().end(Response.ok(books));
             }
+        }
+    }
+
+    public static void getBook(RoutingContext ctx){
+        Long id = SU.parse(ctx.pathParam("id"));
+        if (null == id)
+            ctx.response().end(Response.error("invalid book id"));
+        else {
+            SqlSession session = MybatisConfig.getSession();
+            BookMapper mapper = session.getMapper(BookMapper.class);
+            BookSrc book = mapper.getBookById(id);
+            if (null == book){
+                session.close();
+                ctx.response().end(Response.error("invalid book id"));
+            } else {
+                List<BookChapter> chapters = mapper.getBookChapterByBookId(id);
+                book.setChapters(chapters);
+                session.close();
+                ctx.response().end(Response.ok(book));
+            }
+        }
+    }
+
+    public static void getChapter(RoutingContext ctx){
+        Long id = SU.parse(ctx.pathParam("id"));
+        if (null == id)
+            ctx.response().end(Response.error("invalid chapter id"));
+        else {
+            SqlSession session = MybatisConfig.getSession();
+            BookMapper mapper = session.getMapper(BookMapper.class);
+            BookChapterSrc chapter = mapper.getBookChapterById(id);
+            session.close();
+            ctx.response().end(Response.ok(chapter));
         }
     }
 

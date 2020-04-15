@@ -26,26 +26,22 @@ public class MainService {
     }
 
     public static void permission(RoutingContext ctx){
-        String path = ctx.request().path();
-        ctx.response().end(Response.permission(path));
+        ctx.response().end(Response.permission());
     }
 
     public static void notFound(RoutingContext ctx){
-        String path = ctx.request().path();
-        ctx.response().end(Response.notFound(path));
+        ctx.response().end(Response.notFound());
     }
 
     public static void notAllowed(RoutingContext ctx){
-        String path = ctx.request().path();
-        ctx.response().end(Response.notAllowed(path));
+        ctx.response().end(Response.notAllowed());
     }
 
     public static void error(RoutingContext ctx){
         //错误打印
         ctx.failure().printStackTrace();
         String message = ctx.failure().getMessage();
-        String path = ctx.request().path();
-        ctx.response().end(SU.isEmpty(message) ? Response.error(path) : Response.error(message,path));
+        ctx.response().end(SU.isEmpty(message) ? Response.error() : Response.error(message));
     }
 
     /**
@@ -58,7 +54,7 @@ public class MainService {
         if (MainVerticle.server.isNeedAuthorize())
             AuthService.authorization(ctx.request(), handler -> {
                 if (handler.failed())
-                    ctx.response().end(Response.error(handler.cause().getMessage(),ctx.request().path()));
+                    ctx.response().end(Response.error(handler.cause().getMessage()));
                 else
                     ctx.next();
             });

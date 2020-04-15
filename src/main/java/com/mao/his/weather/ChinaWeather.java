@@ -30,7 +30,7 @@ public class ChinaWeather {
     public static void getWeather(RoutingContext ctx){
         String city = ctx.request().getParam("city");
         if (SU.isEmpty(city))
-            ctx.response().end(Response.error("param [city] is needed",ctx.request().path()));
+            ctx.response().end(Response.error("param [city] is needed"));
         else {
             String url = String.format(WEATHER_URL,city);
             MainVerticle.webClient.getAbs(url).send(handler -> {
@@ -39,10 +39,10 @@ public class ChinaWeather {
                     if (SU.isNotEmpty(s)){
                         ctx.response().end(Response.ok(transResult(s)));
                     } else {
-                        ctx.response().end(Response.error("read weather data error.",ctx.request().path()));
+                        ctx.response().end(Response.error("read weather data error."));
                     }
                 } else {
-                    ctx.response().end(Response.error("cannot connect etouch api.",ctx.request().path()));
+                    ctx.response().end(Response.error("cannot connect etouch api."));
                 }
             });
         }

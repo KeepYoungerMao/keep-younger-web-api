@@ -73,6 +73,14 @@ public class SU {
         return sb.toString();
     }
 
+    public static Long parse(String id){
+        try {
+            return Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
 
     }

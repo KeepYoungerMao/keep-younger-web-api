@@ -33,11 +33,10 @@ public class AuthService {
     public static void authorize(RoutingContext ctx){
         String client_id = ctx.request().getParam(CLIENT_ID);
         String client_secret = ctx.request().getParam(CLIENT_SECRET);
-        String path = ctx.request().path();
         if (SU.isEmpty(client_id))
-            ctx.response().end(Response.error("needed param client_id",path));
+            ctx.response().end(Response.error("needed param client_id"));
         else if (SU.isEmpty(client_secret))
-            ctx.response().end(Response.error("need param client_secret",path));
+            ctx.response().end(Response.error("need param client_secret"));
         else {
             SqlSession session = MybatisConfig.getSession();
             UserMapper mapper = session.getMapper(UserMapper.class);
@@ -45,10 +44,10 @@ public class AuthService {
             String s = checkClient(client, true, false);
             if (null != s) {
                 session.close();
-                ctx.response().end(Response.error(s,path));
+                ctx.response().end(Response.error(s));
             } else if (!client_secret.equals(client.getClient_secret())) {
                 session.close();
-                ctx.response().end(Response.error("invalid param client_secret",path));
+                ctx.response().end(Response.error("invalid param client_secret"));
             } else {
                 List<Permission> permissions = mapper.getPermissionByRoleId(client.getRole_id());
                 session.close();
@@ -62,13 +61,12 @@ public class AuthService {
 
     public static void refresh(RoutingContext ctx){
         String refresh_token = ctx.request().getParam(REFRESH_TOKEN);
-        String path = ctx.request().path();
         if (SU.isEmpty(refresh_token))
-            ctx.response().end(Response.error("need param refresh_token",path));
+            ctx.response().end(Response.error("need param refresh_token"));
         else {
             Token token = LoginClientCache.refresh(refresh_token);
             if (null == token)
-                ctx.response().end(Response.error("refresh failed. please request a new token",path));
+                ctx.response().end(Response.error("refresh failed. please request a new token"));
             else
                 ctx.response().end(Response.ok(token));
         }

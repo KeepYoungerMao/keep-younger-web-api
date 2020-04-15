@@ -1,4 +1,4 @@
-package com.mao.entity.data;
+package com.mao.entity.data.book;
 
 import com.mao.entity.Page;
 import lombok.Getter;

@@ -19,9 +19,8 @@
     </sql>
 
     <!-- get books data -->
-    <select id="getBooks" parameterType="com.mao.entity.data.BookParam"
-            resultType="com.mao.entity.data.Book">
-        SELECT `id`,`name`,`auth`,`image`,`s_image`,`type`,`type_id`,
+    <select id="getBooks" parameterType="com.mao.entity.data.book.BookParam" resultType="com.mao.entity.data.book.Book">
+        SELECT `id`,`name`,`auth`,`s_image`,`type`,`type_id`,
         `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
         FROM tt_book WHERE `delete` = FALSE
         <include refid="bookFilter"/>
@@ -29,16 +28,14 @@
     </select>
 
     <!-- get books total page -->
-    <select id="getBookTotalPage" parameterType="com.mao.entity.data.BookParam"
-            resultType="java.lang.Long">
+    <select id="getBookTotalPage" parameterType="com.mao.entity.data.book.BookParam" resultType="java.lang.Long">
         SELECT COUNT(`id`) FROM tt_book WHERE `delete` = FALSE
         <include refid="bookFilter"/>
     </select>
 
     <!-- get books data -->
-    <select id="searchBooks" parameterType="com.mao.entity.data.BookParam"
-            resultType="com.mao.entity.data.Book">
-        SELECT `id`,`name`,`auth`,`image`,`s_image`,`type`,`type_id`,
+    <select id="searchBooks" parameterType="com.mao.entity.data.book.BookParam" resultType="com.mao.entity.data.book.Book">
+        SELECT `id`,`name`,`auth`,`s_image`,`type`,`type_id`,
         `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
         FROM tt_book WHERE `delete` = FALSE
         <if test="name != null and name != ''">
@@ -49,6 +46,24 @@
         </if>
         <include refid="bookFilter"/>
         ORDER BY `id` ASC LIMIT #{row}
+    </select>
+
+    <!-- search book by id -->
+    <select id="getBookById" parameterType="java.lang.Long" resultType="com.mao.entity.data.book.BookSrc">
+        SELECT `id`,`name`,`auth`,`image`,`s_image`,`intro`,`type`,`type_id`,
+        `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
+        FROM tt_book WHERE `id` = #{id}
+    </select>
+
+    <!-- get book chapter list -->
+    <select id="getBookChapterByBookId" parameterType="java.lang.Long" resultType="com.mao.entity.data.book.BookChapter">
+        SELECT `id`,`order`,`name` FROM tt_book_chapter
+        WHERE `book_id` = #{id} ORDER BY `order` ASC
+    </select>
+
+    <!--get book chapter src -->
+    <select id="getBookChapterById" parameterType="java.lang.Long" resultType="com.mao.entity.data.book.BookChapterSrc">
+        SELECT `id`,`order`,`name`,`book_id`,`content` FROM tt_book_chapter WHERE `id` = #{id}
     </select>
 
 </mapper>

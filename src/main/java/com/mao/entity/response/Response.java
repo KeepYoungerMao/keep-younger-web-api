@@ -17,24 +17,36 @@ public class Response {
         return o(ResponseEnum.SUCCESS,data);
     }
 
-    public static String permission(String path){
-        return o(ResponseEnum.PERMISSION,new ErrorData(ResponseEnum.PERMISSION.getCode(),PERMISSION,path));
+    public static String permission(String msg){
+        return o(ResponseEnum.PERMISSION,msg);
     }
 
-    public static String notFound(String path){
-        return o(ResponseEnum.NOTFOUND,new ErrorData(ResponseEnum.NOTFOUND.getCode(),NOTFOUND,path));
+    public static String permission(){
+        return o(ResponseEnum.PERMISSION,PERMISSION);
     }
 
-    public static String notAllowed(String path){
-        return o(ResponseEnum.NOT_ALLOWED,new ErrorData(ResponseEnum.NOT_ALLOWED.getCode(),NOT_ALLOWED,path));
+    public static String notFound(String msg){
+        return o(ResponseEnum.NOTFOUND,msg);
     }
 
-    public static String error(String path){
-        return o(ResponseEnum.ERROR,new ErrorData(ResponseEnum.ERROR.getCode(),ERROR,path));
+    public static String notFound(){
+        return o(ResponseEnum.NOTFOUND,NOTFOUND);
     }
 
-    public static String error(String message, String path){
-        return o(ResponseEnum.ERROR,new ErrorData(ResponseEnum.ERROR.getCode(),message,path));
+    public static String notAllowed(String msg){
+        return o(ResponseEnum.NOT_ALLOWED,msg);
+    }
+
+    public static String notAllowed(){
+        return o(ResponseEnum.NOT_ALLOWED,NOT_ALLOWED);
+    }
+
+    public static String error(String msg){
+        return o(ResponseEnum.ERROR,msg);
+    }
+
+    public static String error(){
+        return o(ResponseEnum.ERROR,ERROR);
     }
 
     private static <T> String o(ResponseEnum type, T data){

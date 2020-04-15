@@ -5,7 +5,9 @@ import com.mao.his.bd.BaiDuMap;
 import com.mao.his.weather.ChinaWeather;
 import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
+import com.mao.service.data.BjxService;
 import com.mao.service.data.BookService;
+import com.mao.service.data.BuddhistService;
 import com.mao.util.HttpUtil;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
@@ -17,13 +19,6 @@ import io.vertx.ext.web.handler.FaviconHandler;
 
 /**
  * 服务开启
- * 项目实现：
- * 1.文件读取
- * 2.自定义拦截器
- * 3.子路由
- * 4.错误处理器
- * 5.权限控制
- * 6.简易文件服务器
  * @author zongx at 2020/4/7 21:38
  */
 public class MainVerticle extends AbstractVerticle {
@@ -81,6 +76,13 @@ public class MainVerticle extends AbstractVerticle {
     private Router api(){
         Router apiRouter = Router.router(vertx);
         apiRouter.get("/data/book").handler(BodyHandler.create()).handler(BookService::getBooks);
+        apiRouter.get("/data/book/:id").handler(BookService::getBook);
+        apiRouter.get("/data/book/chapter/:id").handler(BookService::getChapter);
+        apiRouter.get("/data/bjx").handler(BodyHandler.create()).handler(BjxService::getBjx);
+        apiRouter.get("/data/bjx/:id").handler(BjxService::getBjxSrc);
+        apiRouter.get("/data/buddhist").handler(BodyHandler.create()).handler(BuddhistService::getBuddhists);
+        apiRouter.get("/data/buddhist/:id").handler(BuddhistService::getBuddhist);
+        apiRouter.get("/data/buddhist/chapter/:id").handler(BuddhistService::getChapter);
         return apiRouter;
     }
 
