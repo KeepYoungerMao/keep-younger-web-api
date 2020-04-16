@@ -5,9 +5,7 @@ import com.mao.his.bd.BaiDuMap;
 import com.mao.his.weather.ChinaWeather;
 import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
-import com.mao.service.data.BjxService;
-import com.mao.service.data.BookService;
-import com.mao.service.data.BuddhistService;
+import com.mao.service.data.*;
 import com.mao.util.HttpUtil;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
@@ -83,6 +81,10 @@ public class MainVerticle extends AbstractVerticle {
         apiRouter.get("/data/buddhist").handler(BodyHandler.create()).handler(BuddhistService::getBuddhists);
         apiRouter.get("/data/buddhist/:id").handler(BuddhistService::getBuddhist);
         apiRouter.get("/data/buddhist/chapter/:id").handler(BuddhistService::getChapter);
+        apiRouter.get("/data/pic/class").handler(PicService::getPicClass);
+        apiRouter.get("/data/pic").handler(BodyHandler.create()).handler(PicService::getPics);
+        apiRouter.get("/data/pic/image/:id").handler(PicService::getPic);
+        apiRouter.get("/data/m3u8/live").handler(M3U8Service::live);
         return apiRouter;
     }
 
