@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mao.mapper.data.BuddhistMapper">
+
+    <select id="getBuddhists" parameterType="com.mao.entity.data.buddhist.BuddhistParam"
+            resultType="com.mao.entity.data.buddhist.Buddhist">
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id` FROM tt_buddhist WHERE `delete` = FALSE
+        <if test="type != null and type > 0">
+            `type_id` = #{type}
+        </if>
+        ORDER BY `id` ASC LIMIT #{page},#{row}
+    </select>
+
+    <select id="getBuddhistTotalPage" parameterType="com.mao.entity.data.buddhist.BuddhistParam"
+            resultType="java.lang.Long">
+        SELECT COUNT(`id`) FROM tt_buddhist WHERE `delete` = FALSE
+        <if test="type != null and type > 0">
+            `type_id` = #{type}
+        </if>
+    </select>
+
+    <select id="searchBuddhists" parameterType="com.mao.entity.data.buddhist.BuddhistParam"
+            resultType="com.mao.entity.data.buddhist.Buddhist">
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id` FROM tt_buddhist WHERE `delete` = FALSE
+        <if test="name != null and name != ''">
+            LOCATE(#{name},`name`) > 0
+        </if>
+        <if test="name != null and name != ''">
+            LOCATE(#{auth},`auth`) > 0
+        </if>
+        ORDER BY `id` ASC LIMIT #{row}
+    </select>
+
+    <select id="getBuddhist" parameterType="java.lang.Long"
+            resultType="com.mao.entity.data.buddhist.BuddhistSrc">
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id`,`intro`
+        FROM tt_buddhist WHERE `id` = #{id}
+    </select>
+
+    <select id="getChapters" parameterType="java.lang.Long"
+            resultType="com.mao.entity.data.buddhist.BuddhistChapter">
+        SELECT `id`,`order`,`title` from tt_buddhist_chapter WHERE `pid` = #{id}
+    </select>
+
+    <select id="getChapter" parameterType="java.lang.Long"
+            resultType="com.mao.entity.data.buddhist.BuddhistChapterSrc">
+        SELECT `id`,`pid`,`order`,`title`,`src` FROM tt_buddhist_chapter WHERE `id` = #{id}
+    </select>
+
+</mapper>

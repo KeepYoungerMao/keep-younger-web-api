@@ -17,4 +17,14 @@ public class PageData<T> {
     private int page;           //当前页
     private Object filter;      //过滤参数
     private List<T> data;       //当前页数据
+
+    public PageData(){}
+
+    public PageData(long total,int rows, int page, Object filter, List<T> data){
+        this.total = total;
+        this.rows = rows;
+        this.page = page;
+        this.filter = filter;
+        this.data = data;
+    }
 }

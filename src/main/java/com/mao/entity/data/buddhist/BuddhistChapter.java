@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class BuddhistChapter {
     private Long id;            //章节id
-    private Long pid;           //佛经id
     private Integer order;      //排序
     private String title;       //标题
 }

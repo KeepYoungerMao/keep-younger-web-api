@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mao.mapper.data.BjxMapper">
+
+    <select id="getBjx" parameterType="com.mao.entity.data.bjx.BjxParam" resultType="com.mao.entity.data.bjx.Bjx">
+        SELECT `id`,`name`,`py` FROM tt_bjx WHERE `delete` = FALSE
+        <if test="py != null and py != ''">
+            `py` = #{py}
+        </if>
+        ORDER BY `id` ASC LIMIT #{page},#{row}
+    </select>
+
+    <select id="searchBjx" parameterType="com.mao.entity.data.bjx.BjxParam" resultType="com.mao.entity.data.bjx.Bjx">
+        SELECT `id`,`name`,`py` FROM tt_bjx WHERE `delete` = FALSE
+        <if test="name != null and name != ''">
+            LOCATE(#{name},`name`) > 0
+        </if>
+        ORDER BY `id` ASC LIMIT #{row}
+    </select>
+
+    <select id="getBjxTotalPage" parameterType="com.mao.entity.data.bjx.BjxParam" resultType="java.lang.Long">
+        SELECT COUNT(`id`) FROM tt_bjx WHERE `delete` = FALSE
+        <if test="py != null and py != ''">
+            `py` = #{py}
+        </if>
+    </select>
+
+    <select id="getBjxSrc" parameterType="java.lang.Long" resultType="com.mao.entity.data.bjx.BjxSrc">
+        SELECT `id`,`name`,`py`,`src` FROM tt_bjx WHERE `id` = #{id}
+    </select>
+
+</mapper>

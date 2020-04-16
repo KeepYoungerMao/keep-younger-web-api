@@ -10,5 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BuddhistChapterSrc extends BuddhistChapter {
+    private Long pid;       //佛经id
     private String src;     //详情内容
 }

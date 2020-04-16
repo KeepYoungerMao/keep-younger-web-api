@@ -81,6 +81,10 @@ public class SU {
         }
     }
 
+    public static long ceil(long z, int m){
+        return (long) Math.ceil(z/(double)m);
+    }
+
     public static void main(String[] args) {
 
     }

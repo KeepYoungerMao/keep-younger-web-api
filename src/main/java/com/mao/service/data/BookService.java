@@ -23,18 +23,15 @@ public class BookService {
         if (null == bookParam)
             ctx.response().end(Response.error("cannot find params body"));
         else {
-            System.out.println(bookParam);
             SqlSession session = MybatisConfig.getSession();
             BookMapper mapper = session.getMapper(BookMapper.class);
             if (SU.isEmpty(bookParam.getAuth()) && SU.isEmpty(bookParam.getName())){
+                Integer page = bookParam.getPage();
+                bookParam.setPage(page <= 1 ? 0 : (bookParam.getPage() - 1)*bookParam.getRow());
                 List<Book> books = mapper.getBooks(bookParam);
                 long totalPage = mapper.getBookTotalPage(bookParam);
-                PageData<Book> data = new PageData<>();
-                data.setTotal(totalPage);
-                data.setRows(bookParam.getRow());
-                data.setPage(bookParam.getPage());
-                data.setFilter(bookParam);
-                data.setData(books);
+                PageData<Book> data = new PageData<>(SU.ceil(totalPage,bookParam.getRow()),
+                        bookParam.getRow(),page,bookParam,books);
                 session.close();
                 ctx.response().end(Response.ok(data));
             } else {
