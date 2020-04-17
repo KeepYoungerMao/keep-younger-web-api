@@ -89,4 +89,31 @@ public class SU {
 
     }
 
+    //获取所有可能性
+    private static int[][] combination(int[][] arr){
+        int num = 1;
+        for (int[] a : arr) {
+            num *= a.length;
+        }
+        int[][] result = new int[num][arr.length];
+        int arr_num = num;
+        for (int k = 0; k < arr.length; k++) {
+            int v_num = arr[k].length;
+            arr_num = arr_num / v_num;
+            int position = 0;
+            for (int v : arr[k]) {
+                int v_position = position;
+                int count = num / v_num / arr_num;
+                for (int j = 1; j <= count; j++){
+                    for (int i = 0; i < arr_num; i++){
+                        result[v_position + i][k] = v;
+                    }
+                    v_position += arr_num * v_num;
+                }
+                position += arr_num;
+            }
+        }
+        return result;
+    }
+
 }
