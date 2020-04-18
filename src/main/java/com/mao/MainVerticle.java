@@ -2,6 +2,7 @@ package com.mao;
 
 import com.mao.entity.Server;
 import com.mao.his.bd.BaiDuMap;
+import com.mao.his.sudo.SudoKuService;
 import com.mao.his.weather.ChinaWeather;
 import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
@@ -65,6 +66,7 @@ public class MainVerticle extends AbstractVerticle {
         Router hisRouter = Router.router(vertx);
         hisRouter.get("/address/ip").handler(BaiDuMap::addressIp);
         hisRouter.get("/weather/city").handler(ChinaWeather::getWeather);
+        hisRouter.post("/sudoKu").handler(BodyHandler.create()).handler(SudoKuService::sudoKu);
         return hisRouter;
     }
 

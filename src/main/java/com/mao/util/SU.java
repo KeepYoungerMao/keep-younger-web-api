@@ -1,6 +1,5 @@
 package com.mao.util;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -87,22 +86,7 @@ public class SU {
     }
 
     public static void main(String[] args) {
-        int[][] src = {
-                {0,0,5,3,0,0,0,0,0},
-                {8,0,0,0,0,0,0,2,0},
-                {0,7,0,0,1,0,5,0,0},
-                {4,0,0,0,0,5,3,0,0},
-                {0,1,0,0,7,0,0,0,6},
-                {0,0,3,2,0,0,0,8,0},
-                {0,6,0,5,0,0,0,0,9},
-                {0,0,4,0,0,0,0,3,0},
-                {0,0,0,0,0,9,7,0,0}
-        };
-        SudoKu sudoKu = new SudoKu();
-        sudoKu.jx(src,0,0);
-        Map<String, int[][]> map = sudoKu.getMap();
-        if (!map.isEmpty())
-            map.forEach((k,v) -> pf(v));
+
     }
 
     public static void pf(int[][] arr){
@@ -115,7 +99,7 @@ public class SU {
         System.out.println();
     }
 
-    //获取所有可能性
+    //二维数组的所有组合方式
     private static int[][] combination(int[][] arr){
         int num = 1;
         for (int[] a : arr) {
