@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class BookService {
 
+    private static final String IMAGE_PRE = "/file/image/book/";
+
     public static void getBooks(RoutingContext ctx){
         BookParam bookParam = JsonUtil.json2obj(ctx.getBodyAsString(), BookParam.class);
         if (null == bookParam)

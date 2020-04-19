@@ -8,6 +8,9 @@ import io.vertx.ext.web.RoutingContext;
  */
 public class PicService {
 
+    private static final String S_IMAGE_PRE = "/file/image/pic/";
+    private static final String IMAGE_PRE = "/file/image/pic_big/";
+
     public static void getPicClass(RoutingContext ctx){}
 
     public static void getPics(RoutingContext ctx){}

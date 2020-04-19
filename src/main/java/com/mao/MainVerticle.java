@@ -87,6 +87,8 @@ public class MainVerticle extends AbstractVerticle {
         apiRouter.get("/data/pic").handler(BodyHandler.create()).handler(PicService::getPics);
         apiRouter.get("/data/pic/image/:id").handler(PicService::getPic);
         apiRouter.get("/data/m3u8/live").handler(M3U8Service::live);
+        apiRouter.get("/data/m3u8/movie").handler(BodyHandler.create()).handler(M3U8Service::movies);
+        apiRouter.get("/data/m3u8/movie/:id").handler(M3U8Service::movie);
         return apiRouter;
     }
 

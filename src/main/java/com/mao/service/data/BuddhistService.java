@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class BuddhistService {
 
+    private static final String IMAGE_PRE = "/file/image/buddhist/";
+
     public static void getBuddhists(RoutingContext ctx){
         BuddhistParam buddhistParam = JsonUtil.json2obj(ctx.getBodyAsString(), BuddhistParam.class);
         if (null == buddhistParam)

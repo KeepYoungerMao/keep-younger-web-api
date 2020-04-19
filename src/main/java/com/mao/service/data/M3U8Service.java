@@ -10,4 +10,8 @@ public class M3U8Service {
 
     public static void live(RoutingContext ctx){}
 
+    public static void movies(RoutingContext ctx){}
+
+    public static void movie(RoutingContext ctx){}
+
 }
