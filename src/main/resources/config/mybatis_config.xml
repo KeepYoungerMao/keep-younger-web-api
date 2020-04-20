@@ -19,6 +19,10 @@
 
     <mappers>
         <mapper resource="mapper/data/BookMapper.xml"/>
+        <mapper resource="mapper/data/BjxMapper.xml"/>
+        <mapper resource="mapper/data/BuddhistMapper.xml"/>
+        <mapper resource="mapper/data/M3U8Mapper.xml"/>
+        <mapper resource="mapper/data/PicMapper.xml"/>
         <mapper resource="mapper/sys/UserMapper.xml"/>
     </mappers>
 
