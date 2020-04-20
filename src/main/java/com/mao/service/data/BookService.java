@@ -18,8 +18,15 @@ import java.util.List;
  */
 public class BookService {
 
+    /**
+     * 古籍图片地址前缀
+     */
     private static final String IMAGE_PRE = "/file/image/book/";
 
+    /**
+     * 古籍列表查询
+     * 分选择分页查询 和 搜索查询
+     */
     public static void getBooks(RoutingContext ctx){
         BookParam bookParam = JsonUtil.json2obj(ctx.getBodyAsString(), BookParam.class);
         if (null == bookParam)
@@ -31,6 +38,7 @@ public class BookService {
                 Integer page = bookParam.getPage();
                 bookParam.setPage(page <= 1 ? 0 : (bookParam.getPage() - 1)*bookParam.getRow());
                 List<Book> books = mapper.getBooks(bookParam);
+                formatBookImage(books);
                 long totalPage = mapper.getBookTotalPage(bookParam);
                 PageData<Book> data = new PageData<>(SU.ceil(totalPage,bookParam.getRow()),
                         bookParam.getRow(),page,bookParam,books);
@@ -44,6 +52,27 @@ public class BookService {
         }
     }
 
+    /**
+     * 图片路径的补全
+     */
+    private static void formatBookImage(List<Book> books){
+        books.forEach(book -> book.setS_image(IMAGE_PRE + book.getS_image()));
+    }
+
+    /**
+     * 图片路径的补全
+     */
+    private static void formatBookImage(BookSrc src){
+        if (null != src){
+            src.setS_image(IMAGE_PRE + src.getS_image());
+            src.setImage(IMAGE_PRE + src.getImage());
+        }
+    }
+
+    /**
+     * 古籍详情的查询
+     * 附带古籍章节全部列表
+     */
     public static void getBook(RoutingContext ctx){
         Long id = SU.parse(ctx.pathParam("id"));
         if (null == id)
@@ -56,6 +85,7 @@ public class BookService {
                 session.close();
                 ctx.response().end(Response.error("invalid book id"));
             } else {
+                formatBookImage(book);
                 List<BookChapter> chapters = mapper.getBookChapterByBookId(id);
                 book.setChapters(chapters);
                 session.close();
@@ -64,6 +94,9 @@ public class BookService {
         }
     }
 
+    /**
+     * 古籍章节详情的查询
+     */
     public static void getChapter(RoutingContext ctx){
         Long id = SU.parse(ctx.pathParam("id"));
         if (null == id)

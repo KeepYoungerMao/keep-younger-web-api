@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PicClass {
-    private Long id;
-    private Long pid;
-    private String name;
+    private Long id;        //id
+    private Long pid;       //pid
+    private String name;    //name
 }

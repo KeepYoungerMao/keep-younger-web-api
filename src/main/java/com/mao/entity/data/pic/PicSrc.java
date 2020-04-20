@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PicSrc extends Pic {
-    private String image;
-    private String key;
+    private String image;   //大图片地址
+    private String key;     //关键词
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mao.mapper.data.M3U8Mapper">
+
+    <select id="getLives" resultType="com.mao.entity.data.m3u8.Live">
+        SELECT `id`,`name`,`url`,`type`,`kind`,`useful` FROM tt_live_m3u8
+    </select>
+
+    <select id="getMovies" parameterType="com.mao.entity.data.m3u8.MovieParam"
+            resultType="com.mao.entity.data.m3u8.Movie">
+        SELECT `id`,`name`,`image`,`actor`,`type`,`type_id`,`time`,`place`,`place_id`,`weight`,`update`,`delete`
+        FROM tt_movie_m3u8 WHERE `delete` = FALSE
+        <if test="type_id > 0">
+            AND `type_id` = #{type_id}
+        </if>
+        <if test="time != null">
+            AND `time` = #{time}
+        </if>
+        <if test="place_id > 0">
+            AND `place_id` = #{place_id}
+        </if>
+        ORDER BY `id` ASC LIMIT #{page},#{row}
+    </select>
+
+    <select id="getMoviesTotalPage" parameterType="com.mao.entity.data.m3u8.MovieParam"
+            resultType="java.lang.Long">
+        SELECT COUNT(`id`) FROM tt_movie_m3u8 WHERE `delete` = FALSE
+        <if test="type_id > 0">
+            AND `type_id` = #{type_id}
+        </if>
+        <if test="time != null">
+            AND `time` = #{time}
+        </if>
+        <if test="place_id > 0">
+            AND `place_id` = #{place_id}
+        </if>
+    </select>
+
+    <select id="searchMovies" parameterType="com.mao.entity.data.m3u8.MovieParam"
+            resultType="com.mao.entity.data.m3u8.Movie">
+        SELECT `id`,`name`,`image`,`actor`,`type`,`type_id`,`time`,`place`,`place_id`,`weight`,`update`,`delete`
+        FROM tt_movie_m3u8 WHERE `delete` = FALSE
+        <if test="name != null and name != ''">
+            AND LOCATE(#{name},`name`) > 0
+        </if>
+        <if test="actor != null and actor != ''">
+            AND LOCATE(#{actor},`actor`) > 0
+        </if>
+        ORDER BY `id` ASC LIMIT #{row}
+    </select>
+
+    <select id="getMovie" parameterType="java.lang.Long" resultType="com.mao.entity.data.m3u8.MovieSrc">
+        SELECT `id`,`name`,`image`,`actor`,`type`,`type_id`,`time`,`place`,
+        `place_id`,`weight`,`intro`,`m3u8`,`update`,`delete`
+        FROM tt_movie_m3u8 WHERE `id` = #{id}
+    </select>
+
+</mapper>

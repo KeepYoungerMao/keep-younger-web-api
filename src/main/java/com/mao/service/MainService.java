@@ -16,27 +16,44 @@ public class MainService {
 
     private static final Logger log = LoggerFactory.getLogger(MainService.class);
 
-    //所有接口统一发送形式
+    /**
+     * 所有接口统一发送形式
+     */
     public static final String CONTENT_TYPE = "Content-type";
     public static final String CONTENT_TYPE_NAME = "application/json;charset=utf-8";
 
+    /**
+     * 首页返回服务器信息
+     */
     public static void index(RoutingContext ctx){
         log.info("load server message");
         ctx.response().end(Response.ok(MainVerticle.server));
     }
 
+    /**
+     * 401错误捕捉
+     */
     public static void permission(RoutingContext ctx){
         ctx.response().end(Response.permission());
     }
 
+    /**
+     * 404错误捕捉
+     */
     public static void notFound(RoutingContext ctx){
         ctx.response().end(Response.notFound());
     }
 
+    /**
+     * 405错误捕捉
+     */
     public static void notAllowed(RoutingContext ctx){
         ctx.response().end(Response.notAllowed());
     }
 
+    /**
+     * 500错误捕捉
+     */
     public static void error(RoutingContext ctx){
         //错误打印
         ctx.failure().printStackTrace();

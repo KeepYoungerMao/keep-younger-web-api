@@ -5,7 +5,8 @@
 
     <select id="getBuddhists" parameterType="com.mao.entity.data.buddhist.BuddhistParam"
             resultType="com.mao.entity.data.buddhist.Buddhist">
-        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id` FROM tt_buddhist WHERE `delete` = FALSE
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id`,`update`,`delete`
+        FROM tt_buddhist WHERE `delete` = FALSE
         <if test="type != null and type > 0">
             `type_id` = #{type}
         </if>
@@ -22,7 +23,8 @@
 
     <select id="searchBuddhists" parameterType="com.mao.entity.data.buddhist.BuddhistParam"
             resultType="com.mao.entity.data.buddhist.Buddhist">
-        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id` FROM tt_buddhist WHERE `delete` = FALSE
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id`,`update`,`delete`
+        FROM tt_buddhist WHERE `delete` = FALSE
         <if test="name != null and name != ''">
             LOCATE(#{name},`name`) > 0
         </if>
@@ -34,7 +36,7 @@
 
     <select id="getBuddhist" parameterType="java.lang.Long"
             resultType="com.mao.entity.data.buddhist.BuddhistSrc">
-        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id`,`intro`
+        SELECT `id`,`name`,`auth`,`image`,`type`,`type_id`,`intro`,`update`,`delete`
         FROM tt_buddhist WHERE `id` = #{id}
     </select>
 

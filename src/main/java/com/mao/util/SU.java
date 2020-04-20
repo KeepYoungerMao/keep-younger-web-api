@@ -47,6 +47,22 @@ public class SU {
         }
     }
 
+    public static boolean isZs(Integer num){
+        return null != num && num > 0;
+    }
+
+    public static boolean isNotZs(Integer num){
+        return !isZs(num);
+    }
+
+    public static boolean isZs(Long num){
+        return null != num && num > 0;
+    }
+
+    public static boolean isNotZs(Long num){
+        return !isZs(num);
+    }
+
     public static boolean isIP(String ip){
         if (isEmpty(ip))
             return false;

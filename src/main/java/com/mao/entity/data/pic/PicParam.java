@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PicParam extends Page {
-    private String name;
-    private Long pid;
-    private Long sid;
+    private String name;    //名称
+    private Long pid;       //一级分类
+    private Long sid;       //二级分类
 }

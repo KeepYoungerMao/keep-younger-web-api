@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PicClassVo {
-    private Long id;
-    private String name;
-    private List<PicClassVo> child;
+    private Long id;                    //id
+    private String name;                //name
+    private List<PicClassVo> child;     //child
 }
