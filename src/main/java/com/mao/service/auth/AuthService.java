@@ -102,7 +102,7 @@ public class AuthService {
         boolean send = false;
         String path = request.path();
         for (String p : MainVerticle.FILTER_PATH) {
-            if (path.startsWith(p)){
+            if (SU.match(p,path)){
                 String authorization = request.getHeader(AUTHORIZATION);
                 if (SU.isEmpty(authorization))
                     authorization = request.getParam(ACCESS_TOKEN);

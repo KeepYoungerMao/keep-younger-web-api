@@ -101,10 +101,6 @@ public class SU {
         return (long) Math.ceil(z/(double)m);
     }
 
-    public static void main(String[] args) {
-
-    }
-
     public static void pf(int[][] arr){
         for (int[] as : arr) {
             for (int a : as) {
@@ -140,6 +136,53 @@ public class SU {
             }
         }
         return result;
+    }
+
+    /**
+     * url匹配
+     * 1.将匹配规则按[*]切割
+     * 2.依次匹配规则的部分，如果规则部分在url中有出现，则将url匹配上的部分截去，继续匹配下一个规则部分
+     * 3.如果都匹配上，则匹配成功
+     * 【使用String.indexOf()查找字符串中最先出现该字符串的位置】
+     * 举例：
+     * reg : / a / * / c / * . a
+     * url : / a / c / a / c / a . a
+     *
+     * reg切割： / a /    / c /   . a
+     *
+     * 匹配： / a /   成功  / a / c / a / c / a . a   ->   截去【/ a /】        ->    c / a / c /a . a
+     *                     ↑ ↑ ↑
+     * 匹配： / c /   成功  c / a / c / a . a         ->   截去【c / a / c /】  ->    a . a
+     *                           ↑ ↑ ↑
+     * 匹配： . a     成功  a . a                     ->   截去【a . a】        ->    无
+     *                     ↑ ↑ ↑
+     * 匹配完毕
+     * @param reg 匹配规则
+     * @param url url
+     * @return boolean
+     */
+    public static boolean match(String reg, String url){
+        if ("".equals(reg))
+            return "".equals(url) || "/".equals(url);
+        if ("/*".equals(reg))
+            return true;
+        String[] reg_split = reg.split("\\*");
+        int index = 0, reg_len = reg_split.length;
+        boolean b = reg.charAt(reg.length() - 1) == '*';
+        while (url.length() > 0) {
+            if (index == reg_len)
+                return b;
+            String r = reg_split[index++];
+            int indexOf = url.indexOf(r);
+            if (indexOf == -1)
+                return false;
+            url = url.substring(indexOf + r.length());
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
