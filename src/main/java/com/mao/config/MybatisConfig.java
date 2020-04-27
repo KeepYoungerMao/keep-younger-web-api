@@ -1,12 +1,16 @@
 package com.mao.config;
 
-import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.datasource.pooled.PooledDataSourceFactory;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-import java.io.IOException;
-import java.io.Reader;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * mybatis配置
@@ -16,7 +20,7 @@ public class MybatisConfig {
 
     private static SqlSessionFactory sqlSessionFactory;
 
-    static {
+    /*static {
         Reader reader = null;
         try {
             reader = Resources.getResourceAsReader("config/mybatis_config.xml");
@@ -24,6 +28,22 @@ public class MybatisConfig {
             e.printStackTrace();
         }
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+    }*/
+
+    static {
+        Properties properties = new Properties();
+        properties.setProperty("driver","com.mysql.cj.jdbc.Driver");
+        properties.setProperty("url","jdbc:mysql://localhost:3306/keep_younger?characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
+        properties.setProperty("username","root");
+        properties.setProperty("password","root");
+        PooledDataSourceFactory factory = new PooledDataSourceFactory();
+        factory.setProperties(properties);
+        DataSource dataSource = factory.getDataSource();
+        TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        Environment environment = new Environment("development",transactionFactory,dataSource);
+        Configuration configuration = new Configuration(environment);
+        configuration.addMappers("com.mao.mapper");
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
     }
 
     public static SqlSession getSession(){

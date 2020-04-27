@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 改为java代码加载 该配置弃用 -->
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
@@ -18,12 +19,12 @@
     </environments>
 
     <mappers>
-        <mapper resource="mapper/data/BookMapper.xml"/>
-        <mapper resource="mapper/data/BjxMapper.xml"/>
-        <mapper resource="mapper/data/BuddhistMapper.xml"/>
-        <mapper resource="mapper/data/M3U8Mapper.xml"/>
-        <mapper resource="mapper/data/PicMapper.xml"/>
-        <mapper resource="mapper/sys/UserMapper.xml"/>
+        <mapper resource="com/mao/mapper/data/BookMapper.xml"/>
+        <mapper resource="com/mao/mapper/data/BjxMapper.xml"/>
+        <mapper resource="com/mao/mapper/data/BuddhistMapper.xml"/>
+        <mapper resource="com/mao/mapper/data/M3U8Mapper.xml"/>
+        <mapper resource="com/mao/mapper/data/PicMapper.xml"/>
+        <mapper resource="com/mao/mapper/sys/UserMapper.xml"/>
     </mappers>
 
 </configuration>
