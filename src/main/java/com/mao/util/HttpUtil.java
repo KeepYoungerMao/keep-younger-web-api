@@ -19,7 +19,7 @@ public class HttpUtil {
     /**
      * 获取vert.X web client
      * 用vert.X的http客户端，它那个异步handler还真不能做成工具类
-     * 因为查处的数据返回不过去。
+     * 因为查出的数据返回不过去。
      */
     public static WebClient getWebClient(Vertx vertx){
         WebClientOptions options = new WebClientOptions()
