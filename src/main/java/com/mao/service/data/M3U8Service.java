@@ -3,8 +3,8 @@ package com.mao.service.data;
 import com.mao.config.MybatisConfig;
 import com.mao.entity.PageData;
 import com.mao.entity.data.m3u8.*;
-import com.mao.entity.response.Response;
 import com.mao.mapper.data.M3U8Mapper;
+import com.mao.service.BaseService;
 import com.mao.util.JsonUtil;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
@@ -17,7 +17,7 @@ import java.util.List;
  * 电影、电视m3u8播放地址
  * create by mao at 2020/4/16 23:51
  */
-public class M3U8Service {
+public class M3U8Service extends BaseService {
 
     /**
      * 电视播放地址列表查询
@@ -28,7 +28,7 @@ public class M3U8Service {
         M3U8Mapper mapper = session.getMapper(M3U8Mapper.class);
         List<Live> lives = mapper.getLives();
         session.close();
-        ctx.response().end(Response.ok(lives));
+        sendData(ctx,lives);
     }
 
     /**
@@ -36,26 +36,25 @@ public class M3U8Service {
      * 分选择分页查询 和 搜索查询
      */
     public static void movies(RoutingContext ctx){
-        MovieParam movieParam = JsonUtil.json2obj(ctx.getBodyAsString(), MovieParam.class);
+        MovieParam movieParam = bodyParam(ctx,MovieParam.class);
         if (null == movieParam)
-            ctx.response().end(Response.error("invalid body param"));
+            sendError(ctx,"invalid body param");
         else {
             SqlSession session = MybatisConfig.getSession();
             M3U8Mapper mapper = session.getMapper(M3U8Mapper.class);
             if (SU.isEmpty(movieParam.getName()) && SU.isEmpty(movieParam.getActor())){
                 formatMovieParam(movieParam);
                 Integer page = movieParam.getPage();
-                movieParam.setPage(page <= 1 ? 0 : (movieParam.getPage() - 1)*movieParam.getRow());
+                transPage(movieParam);
                 List<Movie> movies = mapper.getMovies(movieParam);
                 Long totalPage = mapper.getMoviesTotalPage(movieParam);
-                PageData<Movie> data = new PageData<>(SU.ceil(totalPage,movieParam.getRow()),
-                        movieParam.getRow(),page,movieParam,movies);
+                PageData<Movie> data = pageData(movies,page,totalPage,movieParam);
                 session.close();
-                ctx.response().end(Response.ok(data));
+                sendData(ctx,data);
             } else {
                 List<Movie> movies = mapper.searchMovies(movieParam);
                 session.close();
-                ctx.response().end(Response.ok(movies));
+                sendData(ctx,movies);
             }
         }
     }
@@ -88,19 +87,19 @@ public class M3U8Service {
      * 电影详情的查询
      */
     public static void movie(RoutingContext ctx){
-        Long id = SU.parse(ctx.pathParam("id"));
+        Long id = pathLong(ctx,"id");
         if (null == id)
-            ctx.response().end(Response.error("invalid param id"));
+            sendError(ctx,"invalid param id");
         else {
             SqlSession session = MybatisConfig.getSession();
             M3U8Mapper mapper = session.getMapper(M3U8Mapper.class);
             MovieSrc movie = mapper.getMovie(id);
             session.close();
             if (null == movie)
-                ctx.response().end(Response.error("invalid param id"));
+                sendError(ctx,"invalid param id");
             else {
                 formatMovie(movie);
-                ctx.response().end(Response.ok(movie));
+                sendData(ctx,movie);
             }
         }
     }

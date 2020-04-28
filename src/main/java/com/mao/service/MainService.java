@@ -4,8 +4,6 @@ import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
 import com.mao.service.auth.AuthService;
 import com.mao.util.SU;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.RoutingContext;
 
 /**
@@ -13,8 +11,6 @@ import io.vertx.ext.web.RoutingContext;
  * @author zongx at 2020/4/7 21:54
  */
 public class MainService {
-
-    private static final Logger log = LoggerFactory.getLogger(MainService.class);
 
     /**
      * 所有接口统一发送形式
@@ -26,7 +22,6 @@ public class MainService {
      * 首页返回服务器信息
      */
     public static void index(RoutingContext ctx){
-        log.info("load server message");
         ctx.response().end(Response.ok(MainVerticle.server));
     }
 

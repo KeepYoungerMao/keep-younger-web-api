@@ -6,9 +6,8 @@ import com.mao.entity.data.pic.Pic;
 import com.mao.entity.data.pic.PicClass;
 import com.mao.entity.data.pic.PicParam;
 import com.mao.entity.data.pic.PicSrc;
-import com.mao.entity.response.Response;
 import com.mao.mapper.data.PicMapper;
-import com.mao.util.JsonUtil;
+import com.mao.service.BaseService;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.ibatis.session.SqlSession;
@@ -19,7 +18,7 @@ import java.util.List;
  * 图片数据处理
  * create by mao at 2020/4/17 0:02
  */
-public class PicService {
+public class PicService extends BaseService {
 
     /**
      * 小图片地址前缀
@@ -39,7 +38,7 @@ public class PicService {
         PicMapper mapper = session.getMapper(PicMapper.class);
         List<PicClass> picClass = mapper.getPicClass();
         session.close();
-        ctx.response().end(Response.ok(picClass));
+        sendData(ctx,picClass);
     }
 
     /**
@@ -48,32 +47,31 @@ public class PicService {
      * 选择分页查询参数必须
      */
     public static void getPics(RoutingContext ctx){
-        PicParam picParam = JsonUtil.json2obj(ctx.getBodyAsString(), PicParam.class);
+        PicParam picParam = bodyParam(ctx,PicParam.class);
         if (null == picParam)
-            ctx.response().end(Response.error("invalid body param"));
+            sendError(ctx,"invalid body param");
         else {
             if (SU.isEmpty(picParam.getName())){
                 if (SU.isNotZs(picParam.getPid()) || SU.isNotZs(picParam.getSid()))
-                    ctx.response().end(Response.error("param is necessary"));
+                    sendError(ctx,"param is necessary");
                 else {
                     SqlSession session = MybatisConfig.getSession();
                     PicMapper mapper = session.getMapper(PicMapper.class);
                     Integer page = picParam.getPage();
-                    picParam.setPage(page <= 1 ? 0 : (picParam.getPage() - 1)*picParam.getRow());
+                    transPage(picParam);
                     List<Pic> pics = mapper.getPics(picParam);
                     formatPicImage(pics);
                     Long totalPage = mapper.getPicsTotalPage(picParam);
-                    PageData<Pic> data = new PageData<>(SU.ceil(totalPage,picParam.getRow()),
-                            picParam.getRow(),page,picParam,pics);
+                    PageData<Pic> data = pageData(pics,page,totalPage,picParam);
                     session.close();
-                    ctx.response().end(Response.ok(data));
+                    sendData(ctx,data);
                 }
             } else {
                 SqlSession session = MybatisConfig.getSession();
                 PicMapper mapper = session.getMapper(PicMapper.class);
                 List<Pic> pics = mapper.searchPics(picParam);
                 session.close();
-                ctx.response().end(Response.ok(pics));
+                sendData(ctx,pics);
             }
         }
     }
@@ -99,16 +97,16 @@ public class PicService {
      * 图片详情的查询
      */
     public static void getPic(RoutingContext ctx){
-        Long id = SU.parse(ctx.pathParam("id"));
+        Long id = pathLong(ctx,"id");
         if (null == id)
-            ctx.response().end(Response.error("invalid param id"));
+            sendError(ctx,"invalid param id");
         else {
             SqlSession session = MybatisConfig.getSession();
             PicMapper mapper = session.getMapper(PicMapper.class);
             PicSrc src = mapper.getPicSrc(id);
             session.close();
             formatPicImage(src);
-            ctx.response().end(Response.ok(src));
+            sendData(ctx,src);
         }
     }
 
