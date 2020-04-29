@@ -4,6 +4,7 @@ import com.mao.entity.Server;
 import com.mao.his.bd.BaiDuMap;
 import com.mao.his.sudo.SudoKuService;
 import com.mao.his.weather.ChinaWeather;
+import com.mao.service.LogService;
 import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
 import com.mao.service.data.*;
@@ -46,6 +47,7 @@ public class MainVerticle extends AbstractVerticle {
         router.errorHandler(401,MainService::permission);
         router.errorHandler(405,MainService::notAllowed);
         router.errorHandler(500,MainService::error);
+        router.route().last().handler(LogService::log);
         vertx.createHttpServer().requestHandler(router).listen(server.getPort());
     }
 

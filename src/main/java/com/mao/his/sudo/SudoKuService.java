@@ -1,7 +1,6 @@
 package com.mao.his.sudo;
 
-import com.mao.entity.response.Response;
-import com.mao.util.JsonUtil;
+import com.mao.service.BaseService;
 import io.vertx.ext.web.RoutingContext;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
  * 数独
  * create by mao at 2020/4/18 22:03
  */
-public class SudoKuService {
+public class SudoKuService extends BaseService {
 
     /**
      * 数独解析
@@ -22,15 +21,18 @@ public class SudoKuService {
      * ]
      */
     public static void sudoKu(RoutingContext ctx){
-        List<String> list = JsonUtil.json2listObj(ctx.getBodyAsString(), String.class);
+        List<String> list = bodyListParam(ctx,String.class);
         int[][] sudoKu = transToSudoKu(list);
         if (null == sudoKu)
-            ctx.response().end(Response.error("error to format this sudoKu"));
+            sendError(ctx,"error to format this sudoKu");
         else {
             SudoKu method = new SudoKu();
             method.analyse(sudoKu);
             List<int[][]> result = method.getResult();
-            ctx.response().end(list.isEmpty() ? Response.error("cannot get result") : Response.ok(transResult(result)));
+            if (result.isEmpty())
+                sendError(ctx,"cannot get result");
+            else
+                sendData(ctx,transResult(result));
         }
     }
 

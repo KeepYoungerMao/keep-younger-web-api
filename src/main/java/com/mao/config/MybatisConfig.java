@@ -54,4 +54,8 @@ public class MybatisConfig {
         return sqlSessionFactory.openSession();
     }
 
+    public static SqlSession getSession(boolean autoCommit){
+        return sqlSessionFactory.openSession(autoCommit);
+    }
+
 }

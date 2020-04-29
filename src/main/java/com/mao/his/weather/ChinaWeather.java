@@ -4,6 +4,7 @@ import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
 import com.mao.his.weather.entity.ForecastWeather;
 import com.mao.his.weather.entity.Result;
+import com.mao.service.BaseService;
 import com.mao.util.HttpUtil;
 import com.mao.util.JsonUtil;
 import com.mao.util.SU;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
  * 来源于中国天气网
  * @author : create by zongx at 2020/4/9 18:16
  */
-public class ChinaWeather {
+public class ChinaWeather extends BaseService {
 
     private static final String WEATHER_URL = "http://wthrcdn.etouch.cn/weather_mini?city=%s";
 
@@ -28,22 +29,24 @@ public class ChinaWeather {
      * 数据包含CDATA标记，json处理时不需要，去除。
      */
     public static void getWeather(RoutingContext ctx){
-        String city = ctx.request().getParam("city");
+        String city = paramString(ctx,"city");
         if (SU.isEmpty(city))
-            ctx.response().end(Response.error("param [city] is needed"));
+            sendError(ctx,"param [city] is needed");
         else {
             String url = String.format(WEATHER_URL,city);
             MainVerticle.webClient.getAbs(url).send(handler -> {
                 if (handler.succeeded()){
                     String s = HttpUtil.unGZIP(handler.result().body().getBytes());
-                    if (SU.isNotEmpty(s)){
-                        ctx.response().end(Response.ok(transResult(s)));
-                    } else {
-                        ctx.response().end(Response.error("read weather data error."));
-                    }
-                } else {
-                    ctx.response().end(Response.error("cannot connect etouch api."));
-                }
+                    if (SU.isNotEmpty(s)) {
+                        String result = transResult(s);
+                        if (SU.isEmpty(result))
+                            sendError(ctx,"data request failed, maybe city name is wrong");
+                        else
+                            sendData(ctx,result);
+                    } else
+                        sendError(ctx,"read weather data error.");
+                } else
+                    sendError(ctx,"cannot connect etouch api.");
             });
         }
     }
@@ -51,10 +54,10 @@ public class ChinaWeather {
     /**
      * 天气数据处理
      */
-    private static Result transResult(String json){
+    private static String transResult(String json){
         Result result = JsonUtil.json2obj(json, Result.class);
         if (null == result || 1000 != result.getStatus())
-            return new Result(500,"data request failed");
+            return null;
         return translateWeatherData(result);
     }
 
@@ -63,12 +66,12 @@ public class ChinaWeather {
      * @param result 天气数据
      * @return result
      */
-    private static Result translateWeatherData(Result result){
+    private static String translateWeatherData(Result result){
         result.getData().getYesterday().setFl(removeK(result.getData().getYesterday().getFl()));
         for(ForecastWeather weather : result.getData().getForecast()){
             weather.setFengli(removeK(weather.getFengli()));
         }
-        return result;
+        return Response.ok(result.getData());
     }
 
     /**
