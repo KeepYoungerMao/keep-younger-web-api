@@ -15,6 +15,7 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.FaviconHandler;
 
 /**
@@ -36,7 +37,7 @@ public class MainVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
         router.route("/favicon.ico").handler(FaviconHandler.create("favicon.ico"));
-        router.route().handler(MainService::filter);
+        router.route().handler(CorsHandler.create("*").allowedHeader("*")).handler(MainService::filter);
         router.route("/").handler(MainService::index);
         router.route("/file/*").subRouter(file());
         if (server.isNeedAuthorize())
@@ -77,7 +78,7 @@ public class MainVerticle extends AbstractVerticle {
      */
     private Router api(){
         Router apiRouter = Router.router(vertx);
-        apiRouter.get("/data/book").handler(BodyHandler.create()).handler(BookService::getBooks);
+        apiRouter.post("/data/book").handler(BodyHandler.create()).handler(BookService::getBooks);
         apiRouter.get("/data/book/:id").handler(BookService::getBook);
         apiRouter.get("/data/book/chapter/:id").handler(BookService::getChapter);
         apiRouter.get("/data/bjx").handler(BodyHandler.create()).handler(BjxService::getBjx);

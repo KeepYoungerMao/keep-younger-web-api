@@ -14,11 +14,11 @@ import lombok.ToString;
 @ToString
 public class BookParam extends Page {
 
-    private String name;
-    private String auth;
-    private Integer type;
-    private Integer dynasty;
-    private Boolean free;
-    private Boolean off_sale;
+    private String name;            //名字关键词
+    private String auth;            //作者关键词
+    private Integer type;           //类型id
+    private Integer dynasty;        //朝代id
+    private Boolean free;           //是否免费
+    private Boolean off_sale;       //是否下架
 
 }

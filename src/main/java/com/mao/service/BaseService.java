@@ -124,6 +124,10 @@ public class BaseService {
      * @param page 前端页码数
      */
     public static void transPage(Page page){
+        if (null == page.getPage())
+            page.setPage(1);
+        if (null == page.getRow())
+            page.setRow(20);
         page.setPage(page.getPage() <= 1 ? 0 : (page.getPage() - 1) * page.getRow());
     }
 
@@ -138,7 +142,9 @@ public class BaseService {
      * @param <V> 分页查询参数 继承于分页参数Page
      * @return 分页数据
      */
-    public static<T,V extends Page> PageData<T> pageData(List<T> data, int curPage, long totalPage, V page){
+    public static<T,V extends Page> PageData<T> pageData(List<T> data, Integer curPage, Long totalPage, V page){
+        if (null == curPage)
+            curPage = 1;
         return new PageData<>(SU.ceil(totalPage, page.getRow()), page.getRow(), curPage, page, data);
     }
 
