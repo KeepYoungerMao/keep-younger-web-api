@@ -20,7 +20,7 @@
 
     <!-- get books data -->
     <select id="getBooks" parameterType="com.mao.entity.data.book.BookParam" resultType="com.mao.entity.data.book.Book">
-        SELECT `id`,`name`,`auth`,`s_image`,`type`,`type_id`,
+        SELECT `id`,`name`,`auth`,`s_image`,`guide`,`guide_auth`,`score`,`type`,`type_id`,
         `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
         FROM tt_book WHERE `delete` = FALSE
         <include refid="bookFilter"/>
@@ -35,7 +35,7 @@
 
     <!-- get books data -->
     <select id="searchBooks" parameterType="com.mao.entity.data.book.BookParam" resultType="com.mao.entity.data.book.Book">
-        SELECT `id`,`name`,`auth`,`s_image`,`type`,`type_id`,
+        SELECT `id`,`name`,`auth`,`s_image`,`guide`,`guide_auth`,`score`,`type`,`type_id`,
         `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
         FROM tt_book WHERE `delete` = FALSE
         <if test="name != null and name != ''">
@@ -50,7 +50,7 @@
 
     <!-- search book by id -->
     <select id="getBookById" parameterType="java.lang.Long" resultType="com.mao.entity.data.book.BookSrc">
-        SELECT `id`,`name`,`auth`,`image`,`s_image`,`intro`,`type`,`type_id`,
+        SELECT `id`,`name`,`auth`,`image`,`s_image`,`intro`,`guide`,`guide_auth`,`score`,`type`,`type_id`,
         `dynasty`,`dynasty_id`,`count`,`free`,`off_sale`,`update`,`delete`
         FROM tt_book WHERE `id` = #{id}
     </select>

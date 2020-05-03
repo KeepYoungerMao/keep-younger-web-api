@@ -15,6 +15,9 @@ public class Book extends Operation {
     private String name;            //名称
     private String auth;            //作者
     private String s_image;         //小图片
+    private String guide;           //导读
+    private String guide_auth;      //导读作者
+    private String score;           //评分
     private String type;            //类型
     private Integer type_id;        //类型id
     private String dynasty;         //朝代
