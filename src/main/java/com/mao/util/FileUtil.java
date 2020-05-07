@@ -10,20 +10,14 @@ import java.net.URLConnection;
  */
 public class FileUtil {
 
-    /**
-     * 读取文件
-     * @param path 文件路径
-     * @return 二进制数据
-     */
-    public static byte[] readFile(String path) {
-        File file = new File(path);
-        if (!file.exists())
+    public static byte[] readFile(InputStream inputStream){
+        if (null == inputStream)
             return null;
         else {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             BufferedInputStream in = null;
             try {
-                in = new BufferedInputStream(new FileInputStream(file));
+                in = new BufferedInputStream(inputStream);
                 int size = 1024;
                 byte[] buffer = new byte[size];
                 int len;
@@ -47,16 +41,35 @@ public class FileUtil {
     }
 
     /**
+     * 读取文件
+     * @param path 文件路径
+     * @return 二进制数据
+     */
+    public static byte[] readFile(String path) {
+        File file = new File(path);
+        if (!file.exists())
+            return null;
+        else {
+            try {
+                return readFile(new FileInputStream(file));
+            } catch (FileNotFoundException e) {
+                return null;
+            }
+        }
+    }
+
+    /**
      * 写入文件
      * 1.存在文件时，文件内容会被清空，写入传入的内容；
      * 2.不存在文件时，会自动新建文件。
      * @param bytes 文件数据
      * @param path 文件路径
+     * @param add 是否是追加文件
      */
-    public static void writeFile(byte[] bytes, String path) {
+    public static void writeFile(byte[] bytes, String path, boolean add) {
         DataOutputStream out = null;
         try {
-            out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
+            out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path,add)));
             out.write(bytes);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,6 +82,10 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void writeFile(String data, String path, boolean add){
+        writeFile(data.getBytes(),path,add);
     }
 
     public static byte[] downloadFile(String url){
@@ -102,7 +119,7 @@ public class FileUtil {
     }
 
     public static void saveFile(String url, String name, String path){
-        writeFile(downloadFile(url),path+name);
+        writeFile(downloadFile(url),path+name,false);
     }
 
     public static void main(String[] args) {
