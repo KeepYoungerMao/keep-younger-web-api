@@ -16,5 +16,7 @@ public class Live extends Operation {
     private String url;         //播放地址
     private Integer type;       //类型
     private String kind;        //视频画质
+    private String image;       //图片
+    private String tips;        //介绍
     private Boolean useful;     //是否可播放
 }
