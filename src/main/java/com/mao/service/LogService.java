@@ -12,16 +12,16 @@ import java.util.concurrent.Executors;
  */
 public class LogService {
 
-    private static final ExecutorService service = Executors.newFixedThreadPool(4);
+    private final ExecutorService service = Executors.newFixedThreadPool(4);
 
-    public static void log(RoutingContext ctx) {
+    public void log(RoutingContext ctx) {
         String path = ctx.request().path();
         int code = ctx.response().getStatusCode();
         saveLog(path,code);
         ctx.response().end();
     }
 
-    public static void saveLog(String path, int status) {
+    public void saveLog(String path, int status) {
         CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
             try {
                 Thread.sleep(3000);

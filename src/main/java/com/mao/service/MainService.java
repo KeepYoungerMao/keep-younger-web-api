@@ -21,35 +21,35 @@ public class MainService {
     /**
      * 首页返回服务器信息
      */
-    public static void index(RoutingContext ctx){
+    public void index(RoutingContext ctx){
         ctx.response().end(Response.ok(MainVerticle.server));
     }
 
     /**
      * 401错误捕捉
      */
-    public static void permission(RoutingContext ctx){
+    public void permission(RoutingContext ctx){
         ctx.response().end(Response.permission());
     }
 
     /**
      * 404错误捕捉
      */
-    public static void notFound(RoutingContext ctx){
+    public void notFound(RoutingContext ctx){
         ctx.response().end(Response.notFound());
     }
 
     /**
      * 405错误捕捉
      */
-    public static void notAllowed(RoutingContext ctx){
+    public void notAllowed(RoutingContext ctx){
         ctx.response().end(Response.notAllowed());
     }
 
     /**
      * 500错误捕捉
      */
-    public static void error(RoutingContext ctx){
+    public void error(RoutingContext ctx){
         //错误打印
         ctx.failure().printStackTrace();
         String message = ctx.failure().getMessage();
@@ -61,7 +61,7 @@ public class MainService {
      * 1.为所有请求添加 application/json 返回格式
      * 2.授权拦截
      */
-    public static void filter(RoutingContext ctx){
+    public void filter(RoutingContext ctx){
         ctx.response().putHeader(CONTENT_TYPE,CONTENT_TYPE_NAME);
         if (MainVerticle.server.isNeedAuthorize())
             AuthService.authorization(ctx.request(), handler -> {
@@ -77,7 +77,7 @@ public class MainService {
     /**
      * 静态资源：图片资源转发
      */
-    public static void image(RoutingContext ctx){
+    public void image(RoutingContext ctx){
         String path = ctx.request().path();
         path = path.substring(5);
         ctx.response().sendFile(MainVerticle.IMAGE_FILE_LOCAL_PATH_PRE + path);

@@ -26,7 +26,7 @@ public class BookService extends BaseService {
      * 古籍列表查询
      * 分选择分页查询 和 搜索查询
      */
-    public static void getBooks(RoutingContext ctx){
+    public void getBooks(RoutingContext ctx){
         BookParam bookParam = bodyParam(ctx,BookParam.class);
         if (null == bookParam)
             sendError(ctx,"cannot find params body");
@@ -53,14 +53,14 @@ public class BookService extends BaseService {
     /**
      * 图片路径的补全
      */
-    private static void formatBookImage(List<Book> books){
+    private void formatBookImage(List<Book> books){
         books.forEach(book -> book.setS_image(IMAGE_PRE + book.getS_image()));
     }
 
     /**
      * 图片路径的补全
      */
-    private static void formatBookImage(BookSrc src){
+    private void formatBookImage(BookSrc src){
         if (null != src){
             src.setS_image(IMAGE_PRE + src.getS_image());
             src.setImage(IMAGE_PRE + src.getImage());
@@ -71,7 +71,7 @@ public class BookService extends BaseService {
      * 古籍详情的查询
      * 附带古籍章节全部列表
      */
-    public static void getBook(RoutingContext ctx){
+    public void getBook(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid book id");
@@ -95,7 +95,7 @@ public class BookService extends BaseService {
     /**
      * 古籍章节详情的查询
      */
-    public static void getChapter(RoutingContext ctx){
+    public void getChapter(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid chapter id");

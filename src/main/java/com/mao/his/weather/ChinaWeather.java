@@ -28,7 +28,7 @@ public class ChinaWeather extends BaseService {
      * 数据为GZIP数据，需要解压
      * 数据包含CDATA标记，json处理时不需要，去除。
      */
-    public static void getWeather(RoutingContext ctx){
+    public void getWeather(RoutingContext ctx){
         String city = paramString(ctx,"city");
         if (SU.isEmpty(city))
             sendError(ctx,"param [city] is needed");
@@ -54,7 +54,7 @@ public class ChinaWeather extends BaseService {
     /**
      * 天气数据处理
      */
-    private static String transResult(String json){
+    private String transResult(String json){
         Result result = JsonUtil.json2obj(json, Result.class);
         if (null == result || 1000 != result.getStatus())
             return null;
@@ -66,7 +66,7 @@ public class ChinaWeather extends BaseService {
      * @param result 天气数据
      * @return result
      */
-    private static String translateWeatherData(Result result){
+    private String translateWeatherData(Result result){
         result.getData().getYesterday().setFl(removeK(result.getData().getYesterday().getFl()));
         for(ForecastWeather weather : result.getData().getForecast()){
             weather.setFengli(removeK(weather.getFengli()));
@@ -79,7 +79,7 @@ public class ChinaWeather extends BaseService {
      * @param str 字符串
      * @return str
      */
-    private static String removeK(String str){
+    private String removeK(String str){
         Pattern p = Pattern.compile(".*<!\\[CDATA\\[(.*)]]>.*");
         Matcher m = p.matcher(str);
         if(m.matches()){

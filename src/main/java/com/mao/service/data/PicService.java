@@ -33,7 +33,7 @@ public class PicService extends BaseService {
     /**
      * 获取图片分类选择数据
      */
-    public static void getPicClass(RoutingContext ctx){
+    public void getPicClass(RoutingContext ctx){
         SqlSession session = MybatisConfig.getSession();
         PicMapper mapper = session.getMapper(PicMapper.class);
         List<PicClass> picClass = mapper.getPicClass();
@@ -46,7 +46,7 @@ public class PicService extends BaseService {
      * 分选择分页查询 和 搜索查询
      * 选择分页查询参数必须
      */
-    public static void getPics(RoutingContext ctx){
+    public void getPics(RoutingContext ctx){
         PicParam picParam = bodyParam(ctx,PicParam.class);
         if (null == picParam)
             sendError(ctx,"invalid body param");
@@ -79,14 +79,14 @@ public class PicService extends BaseService {
     /**
      * 图片路径的补全
      */
-    private static void formatPicImage(List<Pic> pics){
+    private void formatPicImage(List<Pic> pics){
         pics.forEach(pic -> pic.setS_image(S_IMAGE_PRE + pic.getPrl() + "/" + pic.getSrl() + "/" + pic.getS_image()));
     }
 
     /**
      * 图片路径的补全
      */
-    private static void formatPicImage(PicSrc picSrc){
+    private void formatPicImage(PicSrc picSrc){
         if (null != picSrc) {
             picSrc.setS_image(S_IMAGE_PRE + picSrc.getPrl() + "/" + picSrc.getSrl() + "/" + picSrc.getS_image());
             picSrc.setImage(IMAGE_PRE + picSrc.getPrl() + "/" + picSrc.getSrl() + "/" + picSrc.getImage());
@@ -96,7 +96,7 @@ public class PicService extends BaseService {
     /**
      * 图片详情的查询
      */
-    public static void getPic(RoutingContext ctx){
+    public void getPic(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid param id");

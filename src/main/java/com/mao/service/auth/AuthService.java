@@ -30,7 +30,7 @@ public class AuthService {
     private static final String ACCESS_TOKEN = "access_token";
     private static final String REFRESH_TOKEN = "refresh_token";
 
-    public static void authorize(RoutingContext ctx){
+    public void authorize(RoutingContext ctx){
         String client_id = ctx.request().getParam(CLIENT_ID);
         String client_secret = ctx.request().getParam(CLIENT_SECRET);
         if (SU.isEmpty(client_id))
@@ -59,7 +59,7 @@ public class AuthService {
         }
     }
 
-    public static void refresh(RoutingContext ctx){
+    public void refresh(RoutingContext ctx){
         String refresh_token = ctx.request().getParam(REFRESH_TOKEN);
         if (SU.isEmpty(refresh_token))
             ctx.response().end(Response.error("need param refresh_token"));
@@ -110,7 +110,7 @@ public class AuthService {
                     handler.handle(Future.failedFuture("request resource need authorization param"));
                 else {
                     Client client = LoginClientCache.getClient(authorization);
-                    String s = AuthService.checkClient(client,false,true);
+                    String s = checkClient(client,false,true);
                     if (null != s)
                         handler.handle(Future.failedFuture(s));
                     else

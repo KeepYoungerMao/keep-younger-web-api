@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class BjxService extends BaseService {
 
-    public static void getBjx(RoutingContext ctx){
+    public void getBjx(RoutingContext ctx){
         BjxParam bjxParam = bodyParam(ctx,BjxParam.class);
         if (null == bjxParam)
             sendError(ctx,"cannot find param body");
@@ -42,7 +42,7 @@ public class BjxService extends BaseService {
         }
     }
 
-    public static void getBjxSrc(RoutingContext ctx){
+    public void getBjxSrc(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null != id) {
             SqlSession session = MybatisConfig.getSession();

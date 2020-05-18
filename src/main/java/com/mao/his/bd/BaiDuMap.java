@@ -24,7 +24,7 @@ public class BaiDuMap extends BaseService {
      * 根据ip查询该ip所在的粗略地址
      * 由百度API获取
      */
-    public static void addressIp(RoutingContext ctx){
+    public void addressIp(RoutingContext ctx){
         String ip = paramString(ctx,"ip");
         if (SU.isEmpty(ip))
             sendError(ctx,"param [ip] is needed");

@@ -26,7 +26,7 @@ public class BuddhistService extends BaseService {
      * 佛经列表的查询
      * 分选择分页查询 和 搜索查询
      */
-    public static void getBuddhists(RoutingContext ctx){
+    public void getBuddhists(RoutingContext ctx){
         BuddhistParam buddhistParam = bodyParam(ctx,BuddhistParam.class);
         if (null == buddhistParam)
             sendError(ctx,"cannot find body param");
@@ -53,14 +53,14 @@ public class BuddhistService extends BaseService {
     /**
      * 佛经图片路径的补全
      */
-    private static void formatBuddhistImage(List<Buddhist> buddhists){
+    private void formatBuddhistImage(List<Buddhist> buddhists){
         buddhists.forEach(buddhist -> buddhist.setImage(IMAGE_PRE + buddhist.getImage()));
     }
 
     /**
      * 佛经图片路径的补全
      */
-    private static void formatBuddhistImage(BuddhistSrc buddhist){
+    private void formatBuddhistImage(BuddhistSrc buddhist){
         buddhist.setImage(IMAGE_PRE + buddhist.getImage());
     }
 
@@ -68,7 +68,7 @@ public class BuddhistService extends BaseService {
      * 佛经详情的查询
      * 附带佛经所有章节列表
      */
-    public static void getBuddhist(RoutingContext ctx){
+    public void getBuddhist(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid buddhist id");
@@ -92,7 +92,7 @@ public class BuddhistService extends BaseService {
     /**
      * 佛经章节详情的查询
      */
-    public static void getChapter(RoutingContext ctx){
+    public void getChapter(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid chapter id");

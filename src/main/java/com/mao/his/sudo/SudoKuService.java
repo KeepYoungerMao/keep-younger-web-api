@@ -20,7 +20,7 @@ public class SudoKuService extends BaseService {
      *      ...
      * ]
      */
-    public static void sudoKu(RoutingContext ctx){
+    public void sudoKu(RoutingContext ctx){
         List<String> list = bodyListParam(ctx,String.class);
         int[][] sudoKu = transToSudoKu(list);
         if (null == sudoKu)
@@ -36,7 +36,7 @@ public class SudoKuService extends BaseService {
         }
     }
 
-    private static String[][] transResult(List<int[][]> sudoKu){
+    private String[][] transResult(List<int[][]> sudoKu){
         String[][] result = new String[sudoKu.size()][9];
         for (int i = 0; i < sudoKu.size(); i++)
             for (int j = 0; j < 9; j++)
@@ -44,7 +44,7 @@ public class SudoKuService extends BaseService {
         return result;
     }
 
-    private static String join(int[] arr){
+    private String join(int[] arr){
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < 9; i++){
             res.append(arr[i]);
@@ -58,7 +58,7 @@ public class SudoKuService extends BaseService {
      * 转换为数独结构：9*9的二维数组
      * 如果数据格式不正确，返回null
      */
-    public static int[][] transToSudoKu(List<String> list){
+    public int[][] transToSudoKu(List<String> list){
         if (null == list || list.size() != 9)
             return null;
         int[][] sudoKu = new int[9][9];

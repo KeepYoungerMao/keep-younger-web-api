@@ -23,7 +23,7 @@ public class M3U8Service extends BaseService {
      * 电视播放地址列表查询
      * 返回全部列表
      */
-    public static void live(RoutingContext ctx){
+    public void live(RoutingContext ctx){
         SqlSession session = MybatisConfig.getSession();
         M3U8Mapper mapper = session.getMapper(M3U8Mapper.class);
         List<Live> lives = mapper.getLives();
@@ -35,7 +35,7 @@ public class M3U8Service extends BaseService {
      * 电影列表查询
      * 分选择分页查询 和 搜索查询
      */
-    public static void movies(RoutingContext ctx){
+    public void movies(RoutingContext ctx){
         MovieParam movieParam = bodyParam(ctx,MovieParam.class);
         if (null == movieParam)
             sendError(ctx,"invalid body param");
@@ -62,7 +62,7 @@ public class M3U8Service extends BaseService {
     /**
      * 电影查询参数的整理
      */
-    private static void formatMovieParam(MovieParam movieParam){
+    private void formatMovieParam(MovieParam movieParam){
         int type_id = 0;
         if (SU.isNotEmpty(movieParam.getType()))
             for (MovieTypeEnum typeEnum : MovieTypeEnum.values())
@@ -86,7 +86,7 @@ public class M3U8Service extends BaseService {
     /**
      * 电影详情的查询
      */
-    public static void movie(RoutingContext ctx){
+    public void movie(RoutingContext ctx){
         Long id = pathLong(ctx,"id");
         if (null == id)
             sendError(ctx,"invalid param id");
@@ -107,7 +107,7 @@ public class M3U8Service extends BaseService {
     /**
      * 电影播放地址json数据的转化
      */
-    private static void formatMovie(MovieSrc movie){
+    private void formatMovie(MovieSrc movie){
         if (SU.isEmpty(movie.getM3u8())){
             movie.setM3u8("no");
             movie.setUrls(new ArrayList<>(0));

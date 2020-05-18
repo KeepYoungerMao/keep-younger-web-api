@@ -22,7 +22,7 @@ public class BaseService {
      * @param <T> 参数实体泛型
      * @return 参数值
      */
-    public static<T> T bodyParam(RoutingContext ctx, Class<T> clazz){
+    public <T> T bodyParam(RoutingContext ctx, Class<T> clazz){
         String body = ctx.getBodyAsString();
         if (SU.isEmpty(body))
             return null;
@@ -37,7 +37,7 @@ public class BaseService {
      * @param <T> 参数实体泛型
      * @return 参数值
      */
-    public static<T> List<T> bodyListParam(RoutingContext ctx, Class<T> clazz){
+    public <T> List<T> bodyListParam(RoutingContext ctx, Class<T> clazz){
         String body = ctx.getBodyAsString();
         if (SU.isEmpty(body))
             return null;
@@ -51,7 +51,7 @@ public class BaseService {
      * @param param 参数名
      * @return 参数值
      */
-    public static Long pathLong(RoutingContext ctx, String param){
+    public Long pathLong(RoutingContext ctx, String param){
         String pathParam = ctx.pathParam(param);
         if (SU.isEmpty(pathParam))
             return null;
@@ -68,7 +68,7 @@ public class BaseService {
      * @param param 参数名
      * @return 参数值
      */
-    public static String paramString(RoutingContext ctx, String param){
+    public String paramString(RoutingContext ctx, String param){
         return ctx.request().getParam(param);
     }
 
@@ -78,7 +78,7 @@ public class BaseService {
      * @param ctx 上下文
      * @param msg 错误提示
      */
-    public static void sendError(RoutingContext ctx, String msg){
+    public void sendError(RoutingContext ctx, String msg){
         send(ctx,Response.error(msg),500);
     }
 
@@ -90,7 +90,7 @@ public class BaseService {
      * @param data 数据
      * @param <T> 数据泛型
      */
-    public static<T> void sendData(RoutingContext ctx, T data){
+    public <T> void sendData(RoutingContext ctx, T data){
         send(ctx,Response.ok(data),200);
     }
 
@@ -100,7 +100,7 @@ public class BaseService {
      * @param ctx 上下文
      * @param data 数据字符串
      */
-    public static void sendData(RoutingContext ctx, String data){
+    public void sendData(RoutingContext ctx, String data){
         send(ctx,data,200);
     }
 
@@ -110,7 +110,7 @@ public class BaseService {
      * @param msg 发送的数据字符串
      * @param status 发送的状态
      */
-    private static void send(RoutingContext ctx, String msg, int status){
+    private void send(RoutingContext ctx, String msg, int status){
         ctx.response().setStatusCode(status);
         ctx.response().putHeader("Content-Length",String.valueOf(msg.getBytes().length));
         ctx.response().write(msg);
@@ -123,7 +123,7 @@ public class BaseService {
      * 后台数据查询：查询数起始位置
      * @param page 前端页码数
      */
-    public static void transPage(Page page){
+    public void transPage(Page page){
         if (null == page.getPage())
             page.setPage(1);
         if (null == page.getRow())
@@ -142,7 +142,7 @@ public class BaseService {
      * @param <V> 分页查询参数 继承于分页参数Page
      * @return 分页数据
      */
-    public static<T,V extends Page> PageData<T> pageData(List<T> data, Integer curPage, Long totalPage, V page){
+    public <T,V extends Page> PageData<T> pageData(List<T> data, Integer curPage, Long totalPage, V page){
         if (null == curPage)
             curPage = 1;
         return new PageData<>(SU.ceil(totalPage, page.getRow()), page.getRow(), curPage, page, data);
