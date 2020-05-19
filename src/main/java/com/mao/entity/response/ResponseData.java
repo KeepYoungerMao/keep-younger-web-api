@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-class ResponseData<T> {
+public class ResponseData<T> {
 
     private int code;
     private String message;

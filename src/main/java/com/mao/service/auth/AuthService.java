@@ -101,7 +101,7 @@ public class AuthService {
     public static void authorization(HttpServerRequest request, Handler<AsyncResult<Void>> handler){
         boolean send = false;
         String path = request.path();
-        for (String p : MainVerticle.FILTER_PATH) {
+        for (String p : MainVerticle.application.getAuthorize_path()) {
             if (SU.match(p,path)){
                 String authorization = request.getHeader(AUTHORIZATION);
                 if (SU.isEmpty(authorization))

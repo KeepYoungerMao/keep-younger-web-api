@@ -1,5 +1,6 @@
 package com.mao.util;
 
+import com.mao.entity.Application;
 import com.mao.entity.Server;
 
 import java.io.IOException;
@@ -12,8 +13,17 @@ import java.util.Properties;
  */
 public class PropertiesReader {
 
+
+    public static Server readServer(String path) {
+        return new Server(read(path));
+    }
+
+    public static Application readApplication(String path){
+        return new Application(read(path));
+    }
+
     /**
-     * 读取服务参数信息
+     * 读取Properties文件
      * 读取文件采用Class.getResourceAsStream()方法获取InputStream，可读取相对路径文件信息
      * 使用此方法需要以【/】开头，要不然查不到
      *
@@ -21,7 +31,7 @@ public class PropertiesReader {
      * @param path 地址
      * @return 服务信息
      */
-    public static Server readServer(String path) {
+    public static Properties read(String path){
         if (!path.startsWith("/"))
             path = "/" + path;
         Properties properties = new Properties();
@@ -33,7 +43,7 @@ public class PropertiesReader {
                 e.printStackTrace();
             }
         }
-        return new Server(properties);
+        return properties;
     }
 
 }

@@ -63,7 +63,7 @@ public class MainService {
      */
     public void filter(RoutingContext ctx){
         ctx.response().putHeader(CONTENT_TYPE,CONTENT_TYPE_NAME);
-        if (MainVerticle.server.isNeedAuthorize())
+        if (MainVerticle.application.isNeed_authorize())
             AuthService.authorization(ctx.request(), handler -> {
                 if (handler.failed())
                     ctx.response().end(Response.error(handler.cause().getMessage()));
@@ -80,7 +80,7 @@ public class MainService {
     public void image(RoutingContext ctx){
         String path = ctx.request().path();
         path = path.substring(5);
-        ctx.response().sendFile(MainVerticle.IMAGE_FILE_LOCAL_PATH_PRE + path);
+        ctx.response().sendFile(MainVerticle.application.getRoot_path() + path);
     }
 
 }

@@ -148,4 +148,27 @@ public class BaseService {
         return new PageData<>(SU.ceil(totalPage, page.getRow()), page.getRow(), curPage, page, data);
     }
 
+    /**
+     * 查询类型错误处理
+     * @param item 查询类型
+     */
+    public String searchError(String item){
+        return Response.error("cannot find data type: " + item);
+    }
+
+    /**
+     * body参数错误处理
+     */
+    public String bodyParamError(){
+        return Response.error("cannot find param body");
+    }
+
+    public String paramError(String param){
+        return Response.error("invalid param " + param);
+    }
+
+    public <T> String ok(T data){
+        return Response.ok(data);
+    }
+
 }
