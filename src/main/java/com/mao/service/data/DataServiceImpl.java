@@ -1,4 +1,4 @@
-package com.mao.service;
+package com.mao.service.data;
 
 import com.mao.config.MybatisConfig;
 import com.mao.entity.PageData;
@@ -13,6 +13,7 @@ import com.mao.entity.data.pic.PicClass;
 import com.mao.entity.data.pic.PicParam;
 import com.mao.entity.data.pic.PicSrc;
 import com.mao.mapper.data.*;
+import com.mao.service.BaseService;
 import com.mao.util.JsonUtil;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
@@ -25,7 +26,7 @@ import java.util.List;
  * 数据查询处理
  * @author : create by zongx at 2020/5/19 15:37
  */
-public class SearchDataService extends BaseService {
+public class DataServiceImpl extends BaseService implements DataService {
 
     /**
      * 古籍图片地址前缀

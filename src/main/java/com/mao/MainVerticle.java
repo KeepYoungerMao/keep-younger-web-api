@@ -2,13 +2,11 @@ package com.mao;
 
 import com.mao.entity.Application;
 import com.mao.entity.Server;
-import com.mao.his.bd.BaiDuMap;
-import com.mao.his.sudo.SudoKuService;
-import com.mao.his.weather.ChinaWeather;
 import com.mao.service.LogService;
 import com.mao.service.MainService;
-import com.mao.service.SearchDataService;
 import com.mao.service.auth.AuthService;
+import com.mao.service.data.DataService;
+import com.mao.service.his.HisService;
 import com.mao.util.HttpUtil;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
@@ -36,10 +34,8 @@ public class MainVerticle extends AbstractVerticle {
     private final MainService mainService = new MainService();
     private final LogService logService = new LogService();
     private final AuthService authService = new AuthService();
-    private final BaiDuMap baiDuMap = new BaiDuMap();
-    private final ChinaWeather chinaWeather = new ChinaWeather();
-    private final SudoKuService sudoKuService = new SudoKuService();
-    private final SearchDataService searchDataService = new SearchDataService();
+    private final DataService dataService = DataService.created();
+    private final HisService hisService = HisService.created();
 
     @Override
     public void start() {
@@ -47,16 +43,17 @@ public class MainVerticle extends AbstractVerticle {
         router.route("/favicon.ico").handler(FaviconHandler.create("favicon.ico"));
         router.route().handler(CorsHandler.create("*").allowedHeader("*")).handler(mainService::filter);
         router.route("/").handler(mainService::index);
-        router.route("/file/*").subRouter(file());
         if (application.isNeed_authorize())
             router.route("/auth/*").subRouter(auth());
+        router.route("/file/*").subRouter(file());
         router.route("/api/*").subRouter(api());
-        router.route("/his/*").subRouter(his());
+        router.route().last().handler(logService::log);
+
         router.errorHandler(404, mainService::notFound);
         router.errorHandler(401,mainService::permission);
         router.errorHandler(405,mainService::notAllowed);
         router.errorHandler(500,mainService::error);
-        router.route().last().handler(logService::log);
+
         vertx.createHttpServer().requestHandler(router).listen(server.getPort());
     }
 
@@ -71,23 +68,15 @@ public class MainVerticle extends AbstractVerticle {
     }
 
     /**
-     * his类请求
-     */
-    private Router his(){
-        Router hisRouter = Router.router(vertx);
-        hisRouter.get("/address/ip").handler(baiDuMap::addressIp);
-        hisRouter.get("/weather/city").handler(chinaWeather::getWeather);
-        hisRouter.post("/sudoKu").handler(BodyHandler.create()).handler(sudoKuService::sudoKu);
-        return hisRouter;
-    }
-
-    /**
      * api类请求
      */
     private Router api(){
         Router apiRouter = Router.router(vertx);
-        apiRouter.post("/search/data/:item").handler(BodyHandler.create()).handler(searchDataService::searchList);
-        apiRouter.get("/search/data/:item/:id").handler(searchDataService::searchItem);
+        apiRouter.post("/search/data/:item").handler(BodyHandler.create()).handler(dataService::searchList);
+        apiRouter.get("/search/data/:item/:id").handler(dataService::searchItem);
+        apiRouter.get("/his/address/ip").handler(hisService::addressIp);
+        apiRouter.get("/his/weather/city").handler(hisService::weather);
+        apiRouter.post("/his/sudoKu").handler(BodyHandler.create()).handler(hisService::sudoKu);
         return apiRouter;
     }
 
