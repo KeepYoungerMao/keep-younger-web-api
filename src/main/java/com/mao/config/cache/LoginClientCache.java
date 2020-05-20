@@ -2,8 +2,6 @@ package com.mao.config.cache;
 
 import com.mao.entity.response.Token;
 import com.mao.entity.sys.Client;
-import com.mao.service.auth.AuthService;
-import com.mao.util.SU;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class LoginClientCache {
 
+    /**
+     * 客户端缓存数据
+     * key: token
+     * value: 客户端数据
+     */
     private static final Map<String, Client> CLIENTS = new HashMap<>();
+
+    /**
+     * token信息，用于竖心token使用
+     * key： refresh_token
+     * value： token信息
+     */
     private static final Map<String, Token> TOKENS = new HashMap<>();
 
     private LoginClientCache(){}
@@ -125,26 +134,6 @@ public class LoginClientCache {
         synchronized (TOKENS){
             return TOKENS.get(token);
         }
-    }
-
-    /**
-     * token的刷新
-     * @param token refresh_token
-     * @return 新token
-     */
-    public static Token refresh(String token){
-        Token oldToken = getToken(token);
-        if (null == oldToken)
-            return null;
-        Client client = getClient(oldToken.getAccess_token());
-        if (null == client)
-            return null;
-        String s = AuthService.checkClient(client, false, false);
-        if (null != s)
-            return null;
-        Token newToken = new Token(SU.uuid(),SU.uuid());
-        save(newToken,client);
-        return newToken;
     }
 
 }

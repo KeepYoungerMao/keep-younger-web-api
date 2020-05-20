@@ -33,7 +33,7 @@ public class MainVerticle extends AbstractVerticle {
     //services
     private final MainService mainService = new MainService();
     private final LogService logService = new LogService();
-    private final AuthService authService = new AuthService();
+    private final AuthService authService = AuthService.created();
     private final DataService dataService = DataService.created();
     private final HisService hisService = HisService.created();
 
@@ -41,7 +41,7 @@ public class MainVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
         router.route("/favicon.ico").handler(FaviconHandler.create("favicon.ico"));
-        router.route().handler(CorsHandler.create("*").allowedHeader("*")).handler(mainService::filter);
+        router.route().handler(CorsHandler.create("*").allowedHeader("*")).handler(authService::filter);
         router.route("/").handler(mainService::index);
         if (application.isNeed_authorize())
             router.route("/auth/*").subRouter(auth());

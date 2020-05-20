@@ -2,7 +2,6 @@ package com.mao.service;
 
 import com.mao.MainVerticle;
 import com.mao.entity.response.Response;
-import com.mao.service.auth.AuthService;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
 
@@ -54,24 +53,6 @@ public class MainService {
         ctx.failure().printStackTrace();
         String message = ctx.failure().getMessage();
         ctx.response().end(SU.isEmpty(message) ? Response.error() : Response.error(message));
-    }
-
-    /**
-     * 拦截器
-     * 1.为所有请求添加 application/json 返回格式
-     * 2.授权拦截
-     */
-    public void filter(RoutingContext ctx){
-        ctx.response().putHeader(CONTENT_TYPE,CONTENT_TYPE_NAME);
-        if (MainVerticle.application.isNeed_authorize())
-            AuthService.authorization(ctx.request(), handler -> {
-                if (handler.failed())
-                    ctx.response().end(Response.error(handler.cause().getMessage()));
-                else
-                    ctx.next();
-            });
-        else
-            ctx.next();
     }
 
     /**

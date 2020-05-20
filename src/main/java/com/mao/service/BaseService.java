@@ -153,20 +153,38 @@ public class BaseService {
      * @param item 查询类型
      */
     public String searchError(String item){
-        return Response.error("cannot find data type: " + item);
+        return error("cannot find data type: " + item);
     }
 
     /**
      * body参数错误处理
      */
     public String bodyParamError(){
-        return Response.error("cannot find param body");
+        return error("cannot find param body");
     }
 
+    /**
+     * 参数错误处理
+     * @param param 参数名
+     * @return 错误信息
+     */
     public String paramError(String param){
-        return Response.error("invalid param " + param);
+        return error("invalid param " + param);
     }
 
+    /**
+     * 错误处理
+     * @param error 错误信息
+     * @return 错误信息
+     */
+    public String error(String error){
+        return Response.error(error);
+    }
+
+    /**
+     * 成功处理
+     * @param data 成功发送数据
+     */
     public <T> String ok(T data){
         return Response.ok(data);
     }
