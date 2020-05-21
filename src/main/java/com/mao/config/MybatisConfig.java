@@ -1,5 +1,7 @@
 package com.mao.config;
 
+import com.mao.Main;
+import com.mao.util.SecretUtil;
 import org.apache.ibatis.datasource.pooled.PooledDataSourceFactory;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -26,7 +28,7 @@ public class MybatisConfig {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/keep_younger";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "0C63AB7CF5178804AB4166D919F3AF83";
     private static final String MAPPER_PACKAGE = "com.mao.mapper";
     //====================================参数配置================================================//
 
@@ -39,7 +41,7 @@ public class MybatisConfig {
         properties.setProperty("driver",DRIVER);
         properties.setProperty("url",URL+URL_PARAM);
         properties.setProperty("username",USERNAME);
-        properties.setProperty("password",PASSWORD);
+        properties.setProperty("password", SecretUtil.decrypt(PASSWORD,Main.key,SecretUtil.SecretEnum.AES));
         PooledDataSourceFactory factory = new PooledDataSourceFactory();
         factory.setProperties(properties);
         DataSource dataSource = factory.getDataSource();
@@ -51,7 +53,7 @@ public class MybatisConfig {
     }
 
     public static SqlSession getSession(){
-        return sqlSessionFactory.openSession();
+        return getSession(false);
     }
 
     public static SqlSession getSession(boolean autoCommit){

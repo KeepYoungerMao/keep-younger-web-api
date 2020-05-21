@@ -24,12 +24,12 @@ public class HisServiceImpl extends BaseService implements HisService {
 
     @Override
     public void weather(RoutingContext ctx) {
-        sudoKuService.sudoKu(ctx);
+        chinaWeather.getWeather(ctx);
     }
 
     @Override
     public void sudoKu(RoutingContext ctx) {
-        chinaWeather.getWeather(ctx);
+        sudoKuService.sudoKu(ctx);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.mao;
 
 import io.vertx.core.Vertx;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 
 /**
  * debug主程序
@@ -11,12 +9,23 @@ import io.vertx.core.logging.LoggerFactory;
  */
 public class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+    /**
+     * 程序启动输入参数
+     * 为一个密钥
+     * 用于解密Mysql用户密码
+     */
+    public static String key = "";
 
     public static void main(String[] args) {
+        if (null == args || args.length <= 0)
+            throw new RuntimeException("missing startup parameter");
+        else {
+            key = args[0];
+            System.out.println("get startup parameter: " + key);
+        }
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(MainVerticle.class.getName());
-        log.info("service api started...");
+        System.out.println("service api started...");
     }
 
 }

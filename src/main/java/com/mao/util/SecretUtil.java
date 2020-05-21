@@ -218,16 +218,7 @@ public class SecretUtil {
     }
 
     public static void main(String[] args) {
-        String a = "hello world";
-        String key = "aaa";
-        byte[] encode = encode(a.getBytes(StandardCharsets.UTF_8), key, SecretEnum.AES);
-        byte[] decode = decode(encode, key, SecretEnum.AES);
-        if (null == decode)
-            System.out.println("null data");
-        else {
-            String b = new String(decode, StandardCharsets.UTF_8);
-            System.out.println(b);
-        }
+
     }
 
 }

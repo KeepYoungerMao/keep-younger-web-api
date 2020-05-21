@@ -47,12 +47,13 @@ public class MainVerticle extends AbstractVerticle {
             router.route("/auth/*").subRouter(auth());
         router.route("/file/*").subRouter(file());
         router.route("/api/*").subRouter(api());
-        router.route().last().handler(logService::log);
 
         router.errorHandler(404, mainService::notFound);
         router.errorHandler(401,mainService::permission);
         router.errorHandler(405,mainService::notAllowed);
         router.errorHandler(500,mainService::error);
+
+        router.route().last().handler(logService::log);
 
         vertx.createHttpServer().requestHandler(router).listen(server.getPort());
     }

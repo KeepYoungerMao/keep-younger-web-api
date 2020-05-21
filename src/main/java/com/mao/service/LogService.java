@@ -1,5 +1,6 @@
 package com.mao.service;
 
+import com.mao.entity.response.Response;
 import io.vertx.ext.web.RoutingContext;
 
 import java.util.concurrent.CompletableFuture;
@@ -15,9 +16,14 @@ public class LogService {
     private final ExecutorService service = Executors.newFixedThreadPool(4);
 
     public void log(RoutingContext ctx) {
-        String path = ctx.request().path();
-        int code = ctx.response().getStatusCode();
-        saveLog(path,code);
+        if (ctx.response().bytesWritten() > 0){
+            String path = ctx.request().path();
+            int code = ctx.response().getStatusCode();
+            saveLog(path,code);
+        } else {
+            ctx.response().setStatusCode(400);
+            ctx.response().write(Response.notFound());
+        }
         ctx.response().end();
     }
 
@@ -28,10 +34,10 @@ public class LogService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("save log");
+            //System.out.println("save log");
             return 1;
         },service);
-        future.thenAccept(System.out::println);
+        //future.thenAccept(System.out::println);
     }
 
 }
