@@ -3,7 +3,6 @@ package com.mao.service.auth;
 import com.mao.MainVerticle;
 import com.mao.config.MybatisConfig;
 import com.mao.config.cache.LoginClientCache;
-import com.mao.entity.response.Response;
 import com.mao.entity.response.Token;
 import com.mao.entity.sys.Client;
 import com.mao.entity.sys.Permission;
@@ -11,10 +10,6 @@ import com.mao.mapper.sys.UserMapper;
 import com.mao.service.BaseService;
 import com.mao.service.MainService;
 import com.mao.util.SU;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.ibatis.session.SqlSession;
 
@@ -34,17 +29,13 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     /**
      * token过滤
+     * 先前使用的是Handler<Future>
      * @param ctx 上下文
      */
     public void filter(RoutingContext ctx) {
         ctx.response().putHeader(MainService.CONTENT_TYPE,MainService.CONTENT_TYPE_NAME);
         if (MainVerticle.application.isNeed_authorize())
-            authorization(ctx.request(), handler -> {
-                if (handler.failed())
-                    ctx.response().end(Response.error(handler.cause().getMessage()));
-                else
-                    ctx.next();
-            });
+            authorization(ctx);
         else
             ctx.next();
     }
@@ -128,33 +119,31 @@ public class AuthServiceImpl extends BaseService implements AuthService {
      * 1.获取需要授权的url列表
      * 2.获取客户端发送的验证token。可通过header发送Authorization，可通过链接发送access_token。优先header
      * 3.验证token是否正确
-     * @param request HttpServerRequest
-     * @param handler 处理
      */
-    public void authorization(HttpServerRequest request, Handler<AsyncResult<Void>> handler){
+    public void authorization(RoutingContext ctx){
         boolean send = false;
-        String path = request.path();
+        String path = ctx.request().path();
         for (String p : MainVerticle.application.getAuthorize_path()) {
             if (SU.match(p,path)){
-                String authorization = request.getHeader(AUTHORIZATION);
+                String authorization = ctx.request().getHeader(AUTHORIZATION);
                 if (SU.isEmpty(authorization))
-                    authorization = request.getParam(ACCESS_TOKEN);
+                    authorization = ctx.request().getParam(ACCESS_TOKEN);
                 if (SU.isEmpty(authorization))
-                    handler.handle(Future.failedFuture("request resource need authorization param"));
+                    sendPermission(ctx,"request resource need authorization param");
                 else {
                     Client client = LoginClientCache.getClient(authorization);
                     String s = checkClient(client,false,true);
                     if (null != s)
-                        handler.handle(Future.failedFuture(s));
+                        sendPermission(ctx,s);
                     else
-                        handler.handle(Future.succeededFuture());
+                        ctx.next();
                 }
                 send = true;
                 break;
             }
         }
         if (!send)
-            handler.handle(Future.succeededFuture());
+            ctx.next();
     }
 
     /**

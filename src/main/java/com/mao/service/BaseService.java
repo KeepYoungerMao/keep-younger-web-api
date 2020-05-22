@@ -82,6 +82,10 @@ public class BaseService {
         send(ctx,Response.error(msg),500);
     }
 
+    public void sendPermission(RoutingContext ctx, String msg){
+        send(ctx,Response.permission(msg),405);
+    }
+
     /**
      * 发送数据
      * 发送没有封装成ResponseData类型数据的数据
@@ -112,9 +116,12 @@ public class BaseService {
      */
     private void send(RoutingContext ctx, String msg, int status){
         ctx.response().setStatusCode(status);
-        ctx.response().putHeader("Content-Length",String.valueOf(msg.getBytes().length));
-        ctx.response().write(msg);
-        ctx.next();
+        if (status == 200){
+            ctx.response().putHeader("Content-Length",String.valueOf(msg.getBytes().length));
+            ctx.response().write(msg);
+        } else {
+            ctx.response().end(msg);
+        }
     }
 
     /**
