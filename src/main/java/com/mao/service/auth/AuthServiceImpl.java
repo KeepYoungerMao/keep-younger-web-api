@@ -73,8 +73,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
             }
             session.close();
         }
-        ctx.response().write(data);
-        ctx.next();
+        sendData(ctx,data);
     }
 
     /**
@@ -89,8 +88,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
             Token token = refresh(refresh_token);
             data = null == token ? error("refresh failed. please request a new token") : ok(token);
         }
-        ctx.response().write(data);
-        ctx.next();
+        sendData(ctx,data);
     }
 
     /**

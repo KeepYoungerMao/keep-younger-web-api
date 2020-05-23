@@ -1,6 +1,6 @@
 package com.mao.service.log;
 
-import io.vertx.ext.web.RoutingContext;
+import com.mao.entity.log.Log;
 
 /**
  * 日志处理
@@ -15,6 +15,6 @@ public interface LogService {
         return new LogServiceImpl();
     }
 
-    void log(RoutingContext ctx);
+    void saveLog(Log log);
 
 }

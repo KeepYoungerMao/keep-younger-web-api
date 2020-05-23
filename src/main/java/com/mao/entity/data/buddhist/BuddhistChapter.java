@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BuddhistChapter {
-    private Long id;            //章节id
+    private String id;          //章节id
     private Integer order;      //排序
     private String title;       //标题
 }

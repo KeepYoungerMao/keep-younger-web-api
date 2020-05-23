@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Live extends Operation {
-    private Long id;            //主键
+    private String id;          //主键
     private String name;        //名称
     private String url;         //播放地址
     private Integer type;       //类型

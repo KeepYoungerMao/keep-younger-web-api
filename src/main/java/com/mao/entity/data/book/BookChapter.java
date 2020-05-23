@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookChapter {
-    private Long id;            //主键
+    private String id;          //主键
     private Integer order;      //排序
     private String name;        //章节名称
 }

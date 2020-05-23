@@ -130,8 +130,7 @@ public class DataServiceImpl extends BaseService implements DataService {
                 break;
         }
         session.close();
-        ctx.response().write(data);
-        ctx.next();
+        sendData(ctx,data);
     }
 
     /**
@@ -339,8 +338,7 @@ public class DataServiceImpl extends BaseService implements DataService {
             }
             session.close();
         }
-        ctx.response().write(data);
-        ctx.next();
+        sendData(ctx,data);
     }
 
     /**
@@ -351,7 +349,7 @@ public class DataServiceImpl extends BaseService implements DataService {
      */
     private String searchPicItem(Long id, PicMapper mapper){
         PicSrc src = mapper.getPicSrc(id);
-        if (null != src && src.getId() > 0){
+        if (null != src && SU.isNotEmpty(src.getId())){
             src.setS_image(PIC_S_IMAGE_PRE + src.getPrl() + "/" + src.getSrl() + "/" + src.getS_image());
             src.setImage(PIC_IMAGE_PRE + src.getPrl() + "/" + src.getSrl() + "/" + src.getImage());
         }
@@ -409,7 +407,7 @@ public class DataServiceImpl extends BaseService implements DataService {
      */
     private String searchBuddhistItem(Long id, BuddhistMapper mapper){
         BuddhistSrc buddhist = mapper.getBuddhist(id);
-        if (null != buddhist && buddhist.getId() > 0){
+        if (null != buddhist && SU.isNotEmpty(buddhist.getId())){
             buddhist.setImage(BUDDHIST_IMAGE_PRE + buddhist.getImage());
             List<BuddhistChapter> chapters = mapper.getChapters(id);
             buddhist.setChapters(chapters);
@@ -436,7 +434,7 @@ public class DataServiceImpl extends BaseService implements DataService {
      */
     private String searchBookItem(Long id, BookMapper mapper){
         BookSrc book = mapper.getBookById(id);
-        if (null != book && book.getId() > 0){
+        if (null != book && SU.isNotEmpty(book.getId())){
             //补全图片路径
             book.setS_image(BOOK_IMAGE_PRE + book.getS_image());
             book.setImage(BOOK_IMAGE_PRE + book.getImage());

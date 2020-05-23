@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Pic extends Operation {
-    private Long id;            //id
+    private String id;          //id
     private String name;        //name
     private Integer prl;        //图片路径一级文件夹
     private Integer srl;        //图片路径二级文件夹

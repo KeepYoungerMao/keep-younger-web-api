@@ -13,9 +13,9 @@ import io.vertx.ext.web.RoutingContext;
  */
 public class HisServiceImpl extends BaseService implements HisService {
 
-    private BaiDuMap baiDuMap = new BaiDuMap();
-    private SudoKuService sudoKuService = new SudoKuService();
-    private ChinaWeather chinaWeather = new ChinaWeather();
+    private final BaiDuMap baiDuMap = new BaiDuMap();
+    private final SudoKuService sudoKuService = new SudoKuService();
+    private final ChinaWeather chinaWeather = new ChinaWeather();
 
     @Override
     public void addressIp(RoutingContext ctx) {

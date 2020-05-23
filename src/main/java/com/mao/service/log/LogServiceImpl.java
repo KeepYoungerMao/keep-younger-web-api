@@ -1,7 +1,6 @@
 package com.mao.service.log;
 
-import com.mao.entity.response.Response;
-import io.vertx.ext.web.RoutingContext;
+import com.mao.entity.log.Log;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -16,33 +15,15 @@ public class LogServiceImpl implements LogService {
     private final ExecutorService service = Executors.newFixedThreadPool(4);
 
     /**
-     *
-     * @param ctx
+     * 保存数据
+     * @param log 日志数据
      */
-    public void log(RoutingContext ctx) {
-        if (ctx.response().bytesWritten() > 0){
-            String path = ctx.request().path();
-            int code = ctx.response().getStatusCode();
-            saveLog(path,code);
-            ctx.response().end();
-        } else {
-            ctx.response().setStatusCode(400);
-            ctx.response().end(Response.notFound());
-        }
-
-    }
-
-    public void saveLog(String path, int status) {
-        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("save log");
-            return 1;
+    public void saveLog(Log log) {
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+            System.out.println("保存日志中...");
+            return true;
         },service);
-        //future.thenAccept(System.out::println);
+        future.thenAccept(saved -> System.out.println("save log status: " + saved));
     }
 
 }

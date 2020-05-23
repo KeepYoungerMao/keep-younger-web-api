@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Movie extends Operation {
-    private Long id;            //id
+    private String id;            //id
     private String name;        //名称
     private String image;       //图片地址
     private String actor;       //演员

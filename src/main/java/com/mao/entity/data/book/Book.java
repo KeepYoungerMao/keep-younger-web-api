@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Book extends Operation {
-    private Long id;                //主键
+    private String id;              //主键
     private String name;            //名称
     private String auth;            //作者
     private String s_image;         //小图片

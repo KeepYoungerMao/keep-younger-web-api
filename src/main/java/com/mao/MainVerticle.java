@@ -6,7 +6,6 @@ import com.mao.service.MainService;
 import com.mao.service.auth.AuthService;
 import com.mao.service.data.DataService;
 import com.mao.service.his.HisService;
-import com.mao.service.log.LogService;
 import com.mao.util.HttpUtil;
 import com.mao.util.PropertiesReader;
 import io.vertx.core.AbstractVerticle;
@@ -32,7 +31,6 @@ public class MainVerticle extends AbstractVerticle {
 
     //services
     private final MainService mainService = new MainService();
-    private final LogService logService = LogService.create();
     private final AuthService authService = AuthService.created();
     private final DataService dataService = DataService.created();
     private final HisService hisService = HisService.created();
@@ -53,9 +51,8 @@ public class MainVerticle extends AbstractVerticle {
         router.errorHandler(405,mainService::notAllowed);
         router.errorHandler(500,mainService::error);
 
-        router.route().last().handler(logService::log);
-
         vertx.createHttpServer().requestHandler(router).listen(server.getPort());
+
     }
 
     /**

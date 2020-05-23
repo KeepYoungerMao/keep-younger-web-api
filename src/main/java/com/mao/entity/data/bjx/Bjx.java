@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Bjx extends Operation {
-    private Long id;            //主键
+    private String id;          //主键
     private String name;        //名称
     private String py;          //拼音首字母
 }

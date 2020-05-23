@@ -2,7 +2,9 @@ package com.mao.service;
 
 import com.mao.entity.Page;
 import com.mao.entity.PageData;
+import com.mao.entity.log.Log;
 import com.mao.entity.response.Response;
+import com.mao.service.log.LogService;
 import com.mao.util.JsonUtil;
 import com.mao.util.SU;
 import io.vertx.ext.web.RoutingContext;
@@ -14,6 +16,8 @@ import java.util.List;
  * @author : create by zongx at 2020/4/28 14:38
  */
 public class BaseService {
+
+    private final LogService logService = LogService.create();
 
     /**
      * 获取body内容参数
@@ -79,11 +83,11 @@ public class BaseService {
      * @param msg 错误提示
      */
     public void sendError(RoutingContext ctx, String msg){
-        send(ctx,Response.error(msg),500);
+        send(ctx,Response.error(msg));
     }
 
     public void sendPermission(RoutingContext ctx, String msg){
-        send(ctx,Response.permission(msg),405);
+        send(ctx,Response.permission(msg));
     }
 
     /**
@@ -95,7 +99,7 @@ public class BaseService {
      * @param <T> 数据泛型
      */
     public <T> void sendData(RoutingContext ctx, T data){
-        send(ctx,Response.ok(data),200);
+        send(ctx,Response.ok(data));
     }
 
     /**
@@ -105,23 +109,18 @@ public class BaseService {
      * @param data 数据字符串
      */
     public void sendData(RoutingContext ctx, String data){
-        send(ctx,data,200);
+        send(ctx,data);
     }
 
     /**
      * 发送数据
      * @param ctx 上下文
      * @param msg 发送的数据字符串
-     * @param status 发送的状态
      */
-    private void send(RoutingContext ctx, String msg, int status){
-        ctx.response().setStatusCode(status);
-        if (status == 200){
-            ctx.response().putHeader("Content-Length",String.valueOf(msg.getBytes().length));
-            ctx.response().write(msg);
-        } else {
-            ctx.response().end(msg);
-        }
+    private void send(RoutingContext ctx, String msg){
+        logService.saveLog(new Log());
+        ctx.response().setStatusCode(200);
+        ctx.response().end(msg);
     }
 
     /**
