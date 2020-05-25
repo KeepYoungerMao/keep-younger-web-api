@@ -1,7 +1,6 @@
 package com.mao.entity.log;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * 日志数据
@@ -9,5 +8,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Log {
+    private String id;
+    private String name;
 }

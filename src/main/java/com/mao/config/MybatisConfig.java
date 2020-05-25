@@ -52,10 +52,22 @@ public class MybatisConfig {
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
     }
 
+    /**
+     * 从session工厂中获取session
+     * 默认不自动提交
+     * @return SqlSession
+     */
     public static SqlSession getSession(){
         return getSession(false);
     }
 
+    /**
+     * 从session工厂中获取session
+     * 当执行insert、update、delete或建表、建索引语句的时候可使用此方法
+     * 并设置自动提交，如果不自动提交，数据并不会保存到数据库中
+     * @param autoCommit 是否自动提交
+     * @return SqlSession
+     */
     public static SqlSession getSession(boolean autoCommit){
         return sqlSessionFactory.openSession(autoCommit);
     }

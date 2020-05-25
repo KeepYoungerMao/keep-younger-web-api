@@ -15,6 +15,7 @@ public class Application {
     private final boolean need_authorize;       //是否需要授权
     private final String[] authorize_path;      //需要授权的url列表
     private final String root_path;             //本地硬盘上的文件位置
+    private final int log_size;                 //日志达到该值时进行保存
 
     public Application(Properties properties){
         this.need_authorize = Boolean.parseBoolean(properties.getProperty("need_authorize"));
@@ -29,6 +30,7 @@ public class Application {
             }
         }
         this.root_path = properties.getProperty("root_image_path_pre");
+        this.log_size = Integer.parseInt(properties.getProperty("log_size"));
     }
 
 }
