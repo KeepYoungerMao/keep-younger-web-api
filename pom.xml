@@ -11,7 +11,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <vertx.version>3.9.0</vertx.version>
+        <vertx.version>3.9.4</vertx.version>
         <main.class>com.mao.Main</main.class>
         <main.verticle>com.mao.MainVerticle</main.verticle>
     </properties>
